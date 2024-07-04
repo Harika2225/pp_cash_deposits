@@ -1,70 +1,104 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_CASH_DEPOSITS } from "./queries/cash_deposits_query";
 import "./CashDeposits.css";
+import { MdOutlineSearch } from "react-icons/md";
 
 const CashDeposits = () => {
+  const [deposits, setDeposits] = useState([]);
+  const { loading, error, data } = useQuery(GET_CASH_DEPOSITS);
+
   const permissions = {
-    canEdit: true, // Replace with your actual permission logic
+    canEdit: true,
   };
 
-  const deposits = [
-    {
-      id: 125,
-      bagNumber: "15423",
-      depositType: "Valet",
-      pullDate: "May 31, 2024",
-      depositDate: "May 31, 2024",
-      marketName: "Algiers Point",
-      locationName: "P6619",
-      payMachineID: "P6619",
-      depositAmount: "$5,000.00",
-      employeeEmail: "rajkumar.prajapti@yopmail.com",
-      bankDepositorEmail: "rajkumar.prajapti@yopmail.com",
-      verifiedInBank: "No",
-      bankDescription: "",
-      bankAccountLast4: "5216",
-      verifiedBankDepositAmount: "$0.00",
-      verifiedBankDepositDate: "",
-      variance: "-%5,000.00",
-      shift: "",
-      bankReceiptID: "120.3",
-      digitalPullTime: "",
-      digitalPullTime: "",
-      createdAt: "05/31/2024 6:31 AM (CDT)",
-      files: "	6b7b3e431aa8aab179e78f6173570bf7.PNG",
-    },
-    {
-      id: 124,
-      bagNumber: "485123",
-      depositType: "Valet",
-      pullDate: "May 14, 2024",
-      depositDate: "May 14, 2024",
-      marketName: "Annapolis",
-      locationName: "P2626",
-      payMachineID: "P2626",
-      depositAmount: "$100.00",
-      employeeEmail: "fs-edit-operator@flatstack.com",
-      bankDepositorEmail: "mariya.valeeva@flatstack.com",
-      verifiedInBank: "No",
-      bankDescription: "",
-      bankAccountLast4: "5216",
-      verifiedBankDepositAmount: "$0.00",
-      verifiedBankDepositDate: "",
-      variance: "-%100.00",
-      shift: "night",
-      bankReceiptID: "12220.3",
-      digitalPullTime: "",
-      digitalPullTime: "",
-      createdAt: "05/14/2024 5:14 AM (CDT)",
-      files: "	2ae2f7e35ac25c16856c8a2605741c95.jpg",
-    },
-  ];
+  useEffect(() => {
+    if (data && data.cash_deposits) {
+      const mappedDeposits = data.cash_deposits.map((deposit) => ({
+        id: deposit.id,
+        bag_number: deposit.bag_number,
+        deposit_type_text:
+          deposit.deposit_type.charAt(0).toUpperCase() +
+          deposit.deposit_type.slice(1),
+        formatted_business_date_on: formatDate(deposit.business_date_on),
+        formatted_deposit_date_on: formatDate(deposit.deposit_date_on),
+        market_name: deposit.market_id,
+        location_name: deposit.location_id,
+        pay_machine_id: deposit.pay_machine_id,
+        deposit_amount: deposit.deposit_amount_cents / 100,
+        cashier_email: deposit.cashier?.email,
+        bank_depositor_email: deposit.bank_depositor?.email,
+        is_verified_in_bank: deposit.is_verified_in_bank ? "Yes" : "No",
+        bank_description: deposit.bank_description,
+        bank_account_last4_digits: deposit.bank_account_last4_digits,
+        bank_deposit_amount: deposit.bank_deposit_amount_cents / 100,
+        formatted_bank_deposit_date_on: deposit.bank_deposit_date_on,
+        variance:
+          deposit.bank_deposit_amount_cents -
+          deposit.deposit_amount_cents / 100,
+        shift: deposit.shift,
+        bank_receipt_id: deposit.bank_receipt_id,
+        formatted_digital_pull_time_at: formatDateTime(
+          deposit.digital_pull_time_at
+        ),
+        formatted_digital_pull_2_time_at: formatDateTime(
+          deposit.digital_pull_2_time_at
+        ),
+        formatted_created_at: formatDateTime(deposit.created_at),
+        files: deposit.files.join(", "),
+      }));
+      mappedDeposits.sort(
+        (a, b) =>
+          new Date(b.formatted_created_at) - new Date(a.formatted_created_at)
+      );
 
-  const reportParams = {}; // Replace with your actual report parameters
+      setDeposits(mappedDeposits);
+    }
+  }, [data]);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  const formatDateTime = (dateTimeString) => {
+    if (!dateTimeString) return "";
+    const dateTime = new Date(dateTimeString);
+    const options = {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZoneName: "short",
+    };
+
+    const formattedDateTime = dateTime.toLocaleString("en-US", options);
+    const timeZoneAbbreviation = formattedDateTime.slice(-5); // Get last 3 characters for time zone abbreviation
+    return formattedDateTime.replace(",", "") + ` (${timeZoneAbbreviation})`;
+  };
   const handleExport = () => {
     // Add your export logic here
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching data. Please try again later.</p>;
+  }
+
+  if (!Array.isArray(deposits)) {
+    return <p>No deposits found.</p>;
+  }
 
   return (
     <div className="container-fluid cash-deposits-container">
@@ -99,12 +133,18 @@ const CashDeposits = () => {
 
       <div className="filtersWidth">
         <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search by Pay Machine ID, Bag Number"
-          />
+          <div className="search-input-container">
+            <span className="left-icon">
+              <MdOutlineSearch />
+            </span>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by Pay Machine ID, Bag Number"
+            />
+          </div>
         </div>
+
         <div className="row mb-3">
           <div className="col-md-4">
             <select className="form-control">
@@ -195,7 +235,7 @@ const CashDeposits = () => {
             <th>Bank Depositor Email</th>
             <th>Verified In Bank</th>
             <th>Bank Description</th>
-            <th>Bank Account Last4</th>
+            <th>Bank Account Last 4 digits</th>
             <th>Verified Bank Deposit Amount</th>
             <th>Verified Bank Deposit Date</th>
             <th>Variance</th>
@@ -205,35 +245,41 @@ const CashDeposits = () => {
             <th>Digital Pull 2 Time</th>
             <th>Created At</th>
             <th>Files</th>
-            {/* {permissions.canEdit && <th>Edit</th>} */}
           </tr>
         </thead>
         <tbody>
           {deposits.map((deposit) => (
             <tr key={deposit.id}>
               <td>{deposit.id}</td>
-              <td>{deposit.bagNumber}</td>
-              <td>{deposit.depositType}</td>
-              <td className="no-wrap">{deposit.pullDate}</td>
-              <td>{deposit.depositDate}</td>
-              <td>{deposit.marketName}</td>
-              <td>{deposit.locationName}</td>
-              <td>{deposit.payMachineID}</td>
-              <td>{deposit.depositAmount}</td>
-              <td>{deposit.employeeEmail}</td>
-              <td>{deposit.bankDepositorEmail}</td>
-              <td>{deposit.verifiedInBank}</td>
-              <td>{deposit.bankDescription}</td>
-              <td>{deposit.bankAccountLast4}</td>
-              <td>{deposit.verifiedBankDepositAmount}</td>
-              <td>{deposit.verifiedBankDepositDate}</td>
-              <td>{deposit.variance}</td>
+              <td>{deposit.bag_number}</td>
+              <td>{deposit.deposit_type_text}</td>
+              <td className="no-wrap">{deposit.formatted_business_date_on}</td>
+              <td>{deposit.formatted_deposit_date_on}</td>
+              <td>{deposit.market_name}</td>
+              <td>{deposit.location_name}</td>
+              <td>{deposit.pay_machine_id}</td>
+              <td>${deposit.deposit_amount.toFixed(2)}</td>
+              <td>{deposit.cashier_email}</td>
+              <td>{deposit.bank_depositor_email}</td>
+              <td>{deposit.is_verified_in_bank}</td>
+              <td>{deposit.bank_description}</td>
+              <td>{deposit.bank_account_last4_digits}</td>
+              <td>${deposit.bank_deposit_amount.toFixed(2)}</td>
+              <td>{deposit.formatted_bank_deposit_date_on}</td>
+              <td>
+                {deposit.variance < 0
+                  ? `-$${Math.abs(deposit.variance).toFixed(2)}`
+                  : `$${deposit.variance.toFixed(2)}`}
+              </td>
               <td>{deposit.shift}</td>
-              <td>{deposit.bankReceiptID}</td>
-              <td>{deposit.digitalPullTime}</td>
-              <td>{deposit.digitalPull2Time}</td>
-              <td>{deposit.createdAt}</td>
-              {/* <td>{deposit.files}</td> */}
+              <td>{deposit.bank_receipt_id}</td>
+              <td className="no-wrap">
+                {deposit.formatted_digital_pull_time_at}
+              </td>
+              <td className="no-wrap">
+                {deposit.formatted_digital_pull_2_time_at}
+              </td>
+              <td className="no-wrap">{deposit.formatted_created_at}</td>
               <td>
                 <a href={deposit.files} download>
                   {deposit.files}
@@ -241,14 +287,18 @@ const CashDeposits = () => {
               </td>
               {permissions.canEdit && (
                 <td>
-                  <button className="btn btn-primary editButton">Edit</button>
+                  <Link
+                    to={`/edit-cash-deposit/${deposit.id}`}
+                    className="btn btn-primary editButton"
+                  >
+                    Edit
+                  </Link>
                 </td>
               )}
             </tr>
           ))}
         </tbody>
       </table>
-      {/* Pagination Component should be added here */}
     </div>
   );
 };

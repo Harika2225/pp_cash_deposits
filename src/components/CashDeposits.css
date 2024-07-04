@@ -4,21 +4,6 @@
   font-family: "Gotham A", "Gotham B", "Gotham HTF", "Gotham", Helvetica, sans-serif;
 }
 
-.search-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.search-filters input,
-.search-filters select {
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  flex: 1 1 200px;
-}
 .filtersWidth {
   max-width: 50%;
 }
@@ -63,6 +48,44 @@ table {
   border-color: #46b8da;
   color: white !important;
 }
+.search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.15s ease-in-out; 
+}
+
+.search-input-container:focus-within {
+  border-color: #007bff; 
+}
+
+.left-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:100%;
+}
+
+.left-icon svg {
+  color: #555;
+  background-color: #eee;
+  height:100%;
+  font-size: 45px;
+  padding: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-right: 1px solid #ccc;
+}
+
+
+.search-input-container .form-control {
+  border:none;
+  padding-left: 60px;
+}
+
 table thead th {
   background-color: #f8f9fa;
   padding: 10px;
@@ -72,10 +95,12 @@ table thead th {
     sans-serif;
 }
 .table td,
-th {
+.table th {
+  max-width: 350px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
