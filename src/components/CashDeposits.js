@@ -46,13 +46,9 @@ const CashDeposits = () => {
           deposit.digital_pull_2_time_at
         ),
         formatted_created_at: formatDateTime(deposit.created_at),
-        files: deposit.files.join(", "),
+        files: deposit.files ? deposit.files.join(", ") : "",
       }));
-      mappedDeposits.sort(
-        (a, b) =>
-          new Date(b.formatted_created_at) - new Date(a.formatted_created_at)
-      );
-
+      mappedDeposits.sort((a, b) => b.id - a.id);
       setDeposits(mappedDeposits);
     }
   }, [data]);
@@ -113,7 +109,7 @@ const CashDeposits = () => {
             <div className="buttons">
               {permissions.canEdit && (
                 <Link
-                  to="/new-manage-cash-deposit"
+                  to="/react_cash_deposits/new"
                   className="btn btn-primary newButton"
                 >
                   New

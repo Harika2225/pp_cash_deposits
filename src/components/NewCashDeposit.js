@@ -3,8 +3,9 @@ import CashDepositForm from './CashDepositForm';
 
 const NewCashDeposit = () => {
   return (
-    <div className="page-header">
+    <div className="page-header p-4">
       <h1>New Cash Deposit</h1>
+      <hr/>
       <div className="col-md-12">
         <CashDepositForm />
       </div>
