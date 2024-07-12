@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { INSERT_CASH_DEPOSIT } from "./mutations/cash_deposits_mutations";
 import "./CashDepositsForm.css";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GET_CASH_DEPOSITS } from "./queries/cash_deposits_query";
 
 const CashDepositForm = ({ cashDepositId }) => {
@@ -41,7 +40,7 @@ const CashDepositForm = ({ cashDepositId }) => {
   const now = new Date();
   const currentTimestamp = formatDate(now);
 
-  const variables = {
+  const initialVariables = {
     bank_depositor_id: formData.bank_depositor_id,
     cashier_id: formData.cashier_id,
     location_id: formData.location,
@@ -59,16 +58,12 @@ const CashDepositForm = ({ cashDepositId }) => {
     digital_pull_2_time_at: formData.digital_pull_2_time_at,
     is_verified_in_bank: formData.is_verified_in_bank,
     deposit_amount_cents: formData.deposit_amount_cents,
-    bank_deposit_amount_cents: formData.bank_deposit_amount_cents*10
-    // bank_deposit_date_on:formData.bank_deposit_date_on,
-    // paystation_character: formData.paystation_character,
+    bank_deposit_amount_cents: formData.bank_deposit_amount_cents,
+    files: formData.files.map((file) => file.name), // Convert files to their names
   };
 
   if (cashDepositId) {
-    variables = {
-      ...variables,
-      created_at: formData.created_at,
-    };
+    initialVariables.created_at = formData.created_at;
   }
 
   const navigate = useNavigate();
@@ -86,7 +81,7 @@ const CashDepositForm = ({ cashDepositId }) => {
     e.preventDefault();
     try {
       const { data } = await insertCashDeposit({
-        variables: { ...variables },
+        variables: initialVariables,
         refetchQueries: [{ query: GET_CASH_DEPOSITS }],
       });
       console.log("Cash deposit created successfully!", data);
@@ -97,12 +92,12 @@ const CashDepositForm = ({ cashDepositId }) => {
   };
 
   const handleChange = (e) => {
-  const { name, value, type, checked, files } = e.target;
-  setFormData((prevState) => ({
-    ...prevState,
-    [name]: type === "checkbox" ? checked : files ? files[0] : value,
-  }));
-};
+    const { name, value, type, checked, files } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: type === "checkbox" ? checked : files ? Array.from(files) : value,
+    }));
+  };
 
   return (
     <form onSubmit={handleSubmit} className="cash-deposit-form container">
@@ -158,10 +153,7 @@ const CashDepositForm = ({ cashDepositId }) => {
             </div>
           </div>
           <div className="flexRow">
-            <div
-              className="form-group col-md-4"
-              // style={{ marginRight: "15px" }}
-            >
+            <div className="form-group col-md-4">
               <label>Market Group</label>
               <input
                 type="text"
@@ -172,10 +164,7 @@ const CashDepositForm = ({ cashDepositId }) => {
                 required
               />
             </div>
-            <div
-              className="form-group col-md-4"
-              // style={{ marginRight: "15px", marginLeft: "15px" }}
-            >
+            <div className="form-group col-md-4">
               <label>Location</label>
               <input
                 type="text"
@@ -186,10 +175,7 @@ const CashDepositForm = ({ cashDepositId }) => {
                 required
               />
             </div>
-            <div
-              className="form-group col-md-4"
-              // style={{ marginLeft: "15px" }}
-            >
+            <div className="form-group col-md-4">
               <label>Pay Machine ID</label>
               <select
                 name="paystation_character"
@@ -289,45 +275,44 @@ const CashDepositForm = ({ cashDepositId }) => {
               name="files"
               onChange={handleChange}
               className="form-control"
+              multiple
               required
             />
           </div>
         </div>
         <div className="col-md-6 accounting-only">
           <h2>ACCOUNTING ONLY</h2>
-          <div
-            className="form-check"
-            style={{ display: "flex", flexDirection: "row" }}
-          >
+          <div className="form-check flex">
             <input
               type="checkbox"
               name="is_verified_in_bank"
               checked={formData.is_verified_in_bank}
               onChange={handleChange}
-              class="form-check" 
+              class="form-check"
             />
             <label>Verified in the bank</label>
           </div>
-
-          <div className="form-group">
-            <label>Verified Bank Deposit Date</label>
-            <input
-              type="date"
-              name="bank_deposit_date_on"
-              value={formData.bank_deposit_date_on}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Verified Bank Deposit Amount</label>
-            <input
-              type="number"
-              name="bank_deposit_cents"
-              value={formData.bank_deposit_cents}
-              onChange={handleChange}
-              className="form-control"
-            />
+          <div className="flex">
+            <div className="form-group col-md-6">
+              <label>Verified Bank Deposit Date</label>
+              <input
+                type="date"
+                name="bank_deposit_date_on"
+                value={formData.bank_deposit_date_on}
+                onChange={handleChange}
+                className="form-control"
+              />
+            </div>
+            <div className="form-group col-md-6">
+              <label>Verified Bank Deposit Amount</label>
+              <input
+                type="number"
+                name="bank_deposit_cents"
+                value={formData.bank_deposit_cents}
+                onChange={handleChange}
+                className="form-control"
+              />
+            </div>
           </div>
           <div className="form-group">
             <label>Bank Description</label>

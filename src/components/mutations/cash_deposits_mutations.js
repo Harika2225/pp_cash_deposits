@@ -18,7 +18,8 @@ mutation InsertCashDeposits(
   $digital_pull_time_at: timestamp,
   $digital_pull_2_time_at: timestamp,
   $is_verified_in_bank: Boolean,
-  $deposit_amount_cents: Int
+  $deposit_amount_cents: Int,
+  $files: [String]
 
 ) {
   insert_cash_deposits(objects: {
@@ -38,7 +39,8 @@ mutation InsertCashDeposits(
     digital_pull_time_at: $digital_pull_time_at,
     digital_pull_2_time_at: $digital_pull_2_time_at,
     is_verified_in_bank: $is_verified_in_bank,
-    deposit_amount_cents: $deposit_amount_cents
+    deposit_amount_cents: $deposit_amount_cents,
+    files: $files
   }) {
     affected_rows
     returning {
