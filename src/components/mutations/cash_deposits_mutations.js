@@ -14,6 +14,7 @@ mutation InsertCashDeposits(
   $updated_at: timestamp,
   $bank_description: String,
   $shift: String,
+  $paystation_character: String,
   $bank_account_last4_digits: String,
   $digital_pull_time_at: timestamp,
   $digital_pull_2_time_at: timestamp,
@@ -36,6 +37,7 @@ mutation InsertCashDeposits(
     updated_at: $updated_at,
     bank_description: $bank_description,
     shift: $shift,
+    paystation_character: $paystation_character,
     bank_account_last4_digits: $bank_account_last4_digits,
     digital_pull_time_at: $digital_pull_time_at,
     digital_pull_2_time_at: $digital_pull_2_time_at,
@@ -58,7 +60,6 @@ mutation InsertCashDeposits(
       bank_description
       bank_receipt_id
       deposit_type
-      pay_machine_id
       paystation_character
       shift
       bank_deposit_date_on
@@ -89,6 +90,7 @@ mutation UpdateCashDeposit(
   $updated_at: timestamp,
   $bank_description: String,
   $shift: String,
+  $paystation_character: String,
   $bank_account_last4_digits: String,
   $digital_pull_time_at: timestamp,
   $digital_pull_2_time_at: timestamp,
@@ -111,6 +113,7 @@ mutation UpdateCashDeposit(
       updated_at: $updated_at,
       bank_description: $bank_description,
       shift: $shift,
+      paystation_character:$paystation_character
       bank_account_last4_digits: $bank_account_last4_digits,
       digital_pull_time_at: $digital_pull_time_at,
       digital_pull_2_time_at: $digital_pull_2_time_at,
@@ -132,7 +135,6 @@ mutation UpdateCashDeposit(
       bank_description
       bank_receipt_id
       deposit_type
-      pay_machine_id
       paystation_character
       shift
       bank_deposit_date_on

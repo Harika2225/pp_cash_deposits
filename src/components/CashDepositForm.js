@@ -15,7 +15,7 @@ const CashDepositForm = ({ cashDepositId }) => {
     bank_receipt_id: "",
     market: "",
     location: "",
-    paystation_character: "N/A",
+    paystation_character: "",
     deposit_amount_cents: "",
     cashier_id: "",
     bank_depositor_id: "",
@@ -107,6 +107,7 @@ const CashDepositForm = ({ cashDepositId }) => {
     updated_at: currentTimestamp,
     bank_description: formData.bank_description,
     shift: formData.shift,
+    paystation_character: formData.paystation_character,
     bank_account_last4_digits: formData.bank_account_last4_digits,
     digital_pull_time_at: formData.digital_pull_time_at,
     digital_pull_2_time_at: formData.digital_pull_2_time_at,
@@ -126,6 +127,7 @@ const CashDepositForm = ({ cashDepositId }) => {
 
   const generateOptions = () => {
     const options = [];
+    options.push("N/A"); 
     for (let i = 65; i <= 90; i++) {
       options.push(String.fromCharCode(i));
     }
