@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { INSERT_CASH_DEPOSIT } from "./mutations/cash_deposits_mutations";
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import { INSERT_CASH_DEPOSIT, UPDATE_CASH_DEPOSIT } from "./mutations/cash_deposits_mutations";
 import "./CashDepositsForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import { GET_CASH_DEPOSITS } from "./queries/cash_deposits_query";
+import { GET_CASH_DEPOSITS, GET_CASH_DEPOSIT_BY_ID } from "./queries/cash_deposits_query";
+
 
 const CashDepositForm = ({ cashDepositId }) => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,59 @@ const CashDepositForm = ({ cashDepositId }) => {
     bank_deposit_amount_cents: "",
     bank_description: "",
   });
+
+  const { loading, error, data } = useQuery(GET_CASH_DEPOSIT_BY_ID, {
+    variables: { id: cashDepositId },
+  });
+
+  useEffect(() => {
+    if (!loading && data && data.cash_deposits_by_pk) {
+      const {
+        deposit_type,
+        bag_number,
+        deposit_date_on,
+        business_date_on,
+        bank_receipt_id,
+        market,
+        location,
+        paystation_character,
+        deposit_amount_cents,
+        cashier,
+        bank_depositor,
+        bank_account_last4_digits,
+        digital_pull_time_at,
+        digital_pull_2_time_at,
+        shift,
+        bank_deposit_date_on,
+        bank_deposit_amount_cents,
+        bank_description,
+      } = data.cash_deposits_by_pk;
+
+      setFormData({
+        deposit_type,
+        bag_number,
+        deposit_date_on,
+        business_date_on,
+        bank_receipt_id,
+        market: market ? market.name : "",
+        location: location ? location.name : "",
+        paystation_character,
+        deposit_amount_cents,
+        cashier_id: cashier ? cashier.email : "",
+        bank_depositor_id: bank_depositor ? bank_depositor.email : "",
+        bank_account_last4_digits,
+        digital_pull_time_at,
+        digital_pull_2_time_at,
+        shift,
+        files: [],
+        is_verified_in_bank: false,
+        bank_deposit_date_on,
+        bank_deposit_amount_cents,
+        bank_description,
+      });
+    }
+  }, [loading, data, cashDepositId]);
+ 
   const formatDate = (date) => {
     const pad = (num) => String(num).padStart(2, "0");
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
@@ -59,7 +113,7 @@ const CashDepositForm = ({ cashDepositId }) => {
     is_verified_in_bank: formData.is_verified_in_bank,
     deposit_amount_cents: formData.deposit_amount_cents,
     bank_deposit_amount_cents: formData.bank_deposit_amount_cents,
-    files: formData.files.map((file) => file.name), // Convert files to their names
+    files: formData.files.map((file) => file.name),
   };
 
   if (cashDepositId) {
@@ -68,6 +122,7 @@ const CashDepositForm = ({ cashDepositId }) => {
 
   const navigate = useNavigate();
   const [insertCashDeposit] = useMutation(INSERT_CASH_DEPOSIT);
+  const [updateCashDeposit] = useMutation(UPDATE_CASH_DEPOSIT);
 
   const generateOptions = () => {
     const options = [];
@@ -80,11 +135,16 @@ const CashDepositForm = ({ cashDepositId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await insertCashDeposit({
-        variables: initialVariables,
-        refetchQueries: [{ query: GET_CASH_DEPOSITS }],
-      });
-      console.log("Cash deposit created successfully!", data);
+      const { data } = cashDepositId
+        ? await updateCashDeposit({
+            variables: { id: cashDepositId, ...initialVariables },
+            refetchQueries: [{ query: GET_CASH_DEPOSITS }],
+          })
+        : await insertCashDeposit({
+            variables: { ...initialVariables },
+            refetchQueries: [{ query: GET_CASH_DEPOSITS }],
+          });
+      console.log(`Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`, data);
       navigate("/react_cash_deposits");
     } catch (error) {
       console.error("There was an error submitting the data!", error);
@@ -307,8 +367,8 @@ const CashDepositForm = ({ cashDepositId }) => {
               <label>Verified Bank Deposit Amount</label>
               <input
                 type="number"
-                name="bank_deposit_cents"
-                value={formData.bank_deposit_cents}
+                name="bank_deposit_amount_cents"
+                value={formData.bank_deposit_amount_cents}
                 onChange={handleChange}
                 className="form-control"
               />

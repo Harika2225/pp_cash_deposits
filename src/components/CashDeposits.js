@@ -24,7 +24,7 @@ const CashDeposits = () => {
         formatted_business_date_on: formatDate(deposit.business_date_on),
         formatted_deposit_date_on: formatDate(deposit.deposit_date_on),
         market_name: deposit.market.name,
-        location_name: deposit.location_id,
+        location_name: deposit.location.name,
         pay_machine_id: deposit.pay_machine_id,
         deposit_amount: deposit.deposit_amount_cents / 100,
         cashier_email: deposit.cashier.email,
@@ -284,7 +284,7 @@ const CashDeposits = () => {
               {permissions.canEdit && (
                 <td>
                   <Link
-                    to={`/edit-cash-deposit/${deposit.id}`}
+                    to={`/react_cash_deposits/${deposit.id}/edit`}
                     className="btn btn-primary editButton"
                   >
                     Edit

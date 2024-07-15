@@ -1,14 +1,26 @@
-import React from 'react';
-import CashDepositForm from './CashDepositForm';
+import React from "react";
+import { useQuery } from "@apollo/client";
+import "./CashDepositsForm.css";
+import { useParams } from "react-router-dom";
+import { GET_CASH_DEPOSIT_BY_ID } from "./queries/cash_deposits_query";
+import CashDepositForm from "./CashDepositForm";
 
-const EditCashDeposit = ({ match }) => {
-  const { id } = match.params;
+const EditCashDeposit = () => {
+  const { id } = useParams();
+  const { loading, data } = useQuery(GET_CASH_DEPOSIT_BY_ID, {
+    variables: { id: parseInt(id) },
+  });
+
+  if (loading) return <p>Loading...</p>;
+
   return (
-    <div className="page-header">
-      <h1>Edit Cash Deposit</h1>
-      <div className="col-md-12">
-        <CashDepositForm cashDepositId={id} />
-      </div>
+    <div className="page-header p-4">
+      <h2>Edit Cash Deposit</h2>
+      <hr />
+      <CashDepositForm
+        cashDepositId={parseInt(id)}
+        initialData={data.cash_deposit_by_pk}
+      />
     </div>
   );
 };
