@@ -47,7 +47,7 @@ const CashDeposits = () => {
           deposit.digital_pull_2_time_at
         ),
         formatted_created_at: formatDateTime(deposit.created_at),
-        files: deposit.files ? deposit.files.join(", ") : "",
+        files: deposit.files ? deposit.files.join("\n") : "",
       }));
       mappedDeposits.sort((a, b) => b.id - a.id);
       setDeposits(mappedDeposits);
@@ -255,7 +255,11 @@ const CashDeposits = () => {
               <td>{deposit.market_name}</td>
               <td>{deposit.location_name}</td>
               {/* <td>{deposit.pay_machine_id}</td> */}
-              <td>{deposit.paystation_character ? `${deposit.location_name}${deposit.paystation_character}` : deposit.location_name}</td>
+              <td>
+                {deposit.paystation_character
+                  ? `${deposit.location_name}${deposit.paystation_character}`
+                  : deposit.location_name}
+              </td>
               <td>${deposit.deposit_amount.toFixed(2)}</td>
               <td>{deposit.cashier_email}</td>
               <td>{deposit.bank_depositor_email}</td>
@@ -279,9 +283,14 @@ const CashDeposits = () => {
               </td>
               <td className="no-wrap">{deposit.formatted_created_at}</td>
               <td>
-                <a href={deposit.files} download>
-                  {deposit.files}
-                </a>
+                {deposit.files &&
+                  deposit.files.split("\n").map((file, index) => (
+                    <div key={index}>
+                      <a href={file} download>
+                        {file}
+                      </a>
+                    </div>
+                  ))}
               </td>
               {permissions.canEdit && (
                 <td>
