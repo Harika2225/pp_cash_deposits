@@ -47,6 +47,7 @@ export const GET_CASH_DEPOSIT_BY_ID = gql`
   query GetCashDepositById($id: bigint!) {
     cash_deposits_by_pk(id: $id) {
       id
+      files
       deposit_type
       bag_number
       deposit_date_on

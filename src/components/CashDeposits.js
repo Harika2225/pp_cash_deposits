@@ -25,6 +25,7 @@ const CashDeposits = () => {
         formatted_deposit_date_on: formatDate(deposit.deposit_date_on),
         market_name: deposit.market.name,
         location_name: deposit.location.name,
+        // pay_machine_id: deposit.pay_machine_id,
         paystation_character: deposit.paystation_character,
         deposit_amount: deposit.deposit_amount_cents / 100,
         cashier_email: deposit.cashier.email,
@@ -253,6 +254,7 @@ const CashDeposits = () => {
               <td>{deposit.formatted_deposit_date_on}</td>
               <td>{deposit.market_name}</td>
               <td>{deposit.location_name}</td>
+              {/* <td>{deposit.pay_machine_id}</td> */}
               <td>{deposit.paystation_character ? `${deposit.location_name}${deposit.paystation_character}` : deposit.location_name}</td>
               <td>${deposit.deposit_amount.toFixed(2)}</td>
               <td>{deposit.cashier_email}</td>
