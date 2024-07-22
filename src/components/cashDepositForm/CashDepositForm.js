@@ -102,7 +102,6 @@ function CashDepositForm({ cashDepositId }) {
   }, [usersLoading, usersData, cashDepositId]);
 
   useEffect(() => {
-    console.log(formData.deposit_type, "ppppppppp");
     if (!loading && data && data.cash_deposits_by_pk) {
       const {
         deposit_type,
@@ -253,12 +252,67 @@ function CashDepositForm({ cashDepositId }) {
   //     console.error("There was an error submitting the data!", error);
   //   }
   // };
+  const [rawValues, setRawValues] = useState({
+    deposit_amount_cents:
+      (formData.deposit_amount_cents / 100).toFixed(2) || "",
+    bank_deposit_amount_cents:
+      (formData.bank_deposit_amount_cents / 100).toFixed(2) || "",
+  });
+
+  useEffect(() => {
+    setRawValues({
+      deposit_amount_cents:
+        (formData.deposit_amount_cents / 100).toFixed(2) || "",
+      bank_deposit_amount_cents:
+        (formData.bank_deposit_amount_cents / 100).toFixed(2) || "",
+    });
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+    if (
+      name === "deposit_amount_cents" ||
+      name === "bank_deposit_amount_cents"
+    ) {
+      setRawValues((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]:
+          type === "checkbox" ? checked : files ? Array.from(files) : value,
+      }));
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    let value = rawValues[name];
+    if (value === "") {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: "",
+      }));
+      return;
+    }
+    if (value && !value.includes(".")) {
+      value = `${value}.00`;
+    } else if (value && value.endsWith(".")) {
+      value = `${value}00`;
+    } else if (value && value.match(/\.\d$/)) {
+      value = `${value}0`;
+    }
+
+    const formattedValue = parseFloat(value) * 100; // Convert to cents
     setFormData((prevState) => ({
       ...prevState,
-      [name]: type === "checkbox" ? checked : files ? Array.from(files) : value,
+      [name]: formattedValue,
+    }));
+    setRawValues((prevState) => ({
+      ...prevState,
+      [name]: (formattedValue / 100).toFixed(2),
     }));
   };
 
@@ -329,7 +383,8 @@ function CashDepositForm({ cashDepositId }) {
                   : "Bank Receipt ID"}
               </label>
               <input
-                type={
+                type={formData.deposit_type === "pay_machine" ? "date" : "text"}
+                name={
                   formData.deposit_type === "pay_machine"
                     ? "business_date_on"
                     : "bank_receipt_id"
@@ -404,8 +459,9 @@ function CashDepositForm({ cashDepositId }) {
             <input
               type="number"
               name="deposit_amount_cents"
-              value={formData.deposit_amount_cents}
+              value={rawValues.deposit_amount_cents}
               onChange={handleChange}
+              onBlur={handleBlur}
               className="form-control"
             />
           </div>
@@ -534,8 +590,9 @@ function CashDepositForm({ cashDepositId }) {
               <input
                 type="number"
                 name="bank_deposit_amount_cents"
-                value={formData.bank_deposit_amount_cents}
+                value={rawValues.bank_deposit_amount_cents}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 className="form-control"
               />
             </div>
