@@ -55,6 +55,8 @@ export const GET_CASH_DEPOSIT_BY_ID = gql`
       bank_receipt_id
       market_id
       location_id
+      bank_depositor_id
+      cashier_id
       paystation_character
       shift
       bank_account_last4_digits

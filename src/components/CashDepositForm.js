@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { INSERT_CASH_DEPOSIT, UPDATE_CASH_DEPOSIT } from "./mutations/cash_deposits_mutations";
+import {
+  INSERT_CASH_DEPOSIT,
+  UPDATE_CASH_DEPOSIT,
+} from "./mutations/cash_deposits_mutations";
 import "./CashDepositsForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import { GET_CASH_DEPOSITS, GET_CASH_DEPOSIT_BY_ID } from "./queries/cash_deposits_query";
-
+import {
+  GET_CASH_DEPOSITS,
+  GET_CASH_DEPOSIT_BY_ID,
+} from "./queries/cash_deposits_query";
+import { GET_MARKETS } from "./queries/markets_query";
+import { GET_LOCATIONS } from "./queries/locations_query";
+import { GET_USERS } from "./queries/users_query";
 
 const CashDepositForm = ({ cashDepositId }) => {
   const [formData, setFormData] = useState({
@@ -13,12 +21,16 @@ const CashDepositForm = ({ cashDepositId }) => {
     deposit_date_on: "",
     business_date_on: "",
     bank_receipt_id: "",
-    market: "",
-    location: "",
+    market_id: "",
+    market_name: "",
+    location_id: "",
+    location_name: "",
     paystation_character: "",
     deposit_amount_cents: "",
     cashier_id: "",
+    cashier_name: "",
     bank_depositor_id: "",
+    bank_depositor_name: "",
     bank_account_last4_digits: "",
     digital_pull_time_at: "",
     digital_pull_2_time_at: "",
@@ -34,6 +46,61 @@ const CashDepositForm = ({ cashDepositId }) => {
     variables: { id: cashDepositId },
   });
 
+  const {
+    loading: marketsLoading,
+    error: marketsError,
+    data: marketsData,
+  } = useQuery(GET_MARKETS);
+
+  useEffect(() => {
+    if (
+      !marketsLoading &&
+      marketsData &&
+      marketsData.markets &&
+      !cashDepositId
+    ) {
+      setFormData((prevState) => ({
+        ...prevState,
+        market: marketsData.markets[0]?.id || "",
+      }));
+    }
+  }, [marketsLoading, marketsData, cashDepositId]);
+
+  const {
+    loading: locationsLoading,
+    error: locationsError,
+    data: locationsData,
+  } = useQuery(GET_LOCATIONS);
+
+  useEffect(() => {
+    if (
+      !locationsLoading &&
+      locationsData &&
+      locationsData.locations &&
+      !cashDepositId
+    ) {
+      setFormData((prevState) => ({
+        ...prevState,
+        location: locationsData.locations[0]?.id || "",
+      }));
+    }
+  }, [locationsLoading, locationsData, cashDepositId]);
+
+  const {
+    loading: usersLoading,
+    error: usersError,
+    data: usersData,
+  } = useQuery(GET_USERS);
+
+  useEffect(() => {
+    if (!usersLoading && usersData && usersData.users && !cashDepositId) {
+      setFormData((prevState) => ({
+        ...prevState,
+        user: usersData.users[0]?.id || "",
+      }));
+    }
+  }, [usersLoading, usersData, cashDepositId]);
+
   useEffect(() => {
     if (!loading && data && data.cash_deposits_by_pk) {
       const {
@@ -42,12 +109,12 @@ const CashDepositForm = ({ cashDepositId }) => {
         deposit_date_on,
         business_date_on,
         bank_receipt_id,
-        market,
-        location,
+        market_id,
+        location_id,
         paystation_character,
         deposit_amount_cents,
-        cashier,
-        bank_depositor,
+        cashier_id,
+        bank_depositor_id,
         bank_account_last4_digits,
         digital_pull_time_at,
         digital_pull_2_time_at,
@@ -63,12 +130,12 @@ const CashDepositForm = ({ cashDepositId }) => {
         deposit_date_on,
         business_date_on,
         bank_receipt_id,
-        market: market ? market.name : "",
-        location: location ? location.name : "",
+        market_id: market_id || "",
+        location_id: location_id || "",
         paystation_character,
         deposit_amount_cents,
-        cashier_id: cashier ? cashier.email : "",
-        bank_depositor_id: bank_depositor ? bank_depositor.email : "",
+        cashier_id: cashier_id || "",
+        bank_depositor_id: bank_depositor_id || "",
         bank_account_last4_digits,
         digital_pull_time_at,
         digital_pull_2_time_at,
@@ -81,7 +148,7 @@ const CashDepositForm = ({ cashDepositId }) => {
       });
     }
   }, [loading, data, cashDepositId]);
- 
+
   const formatDate = (date) => {
     const pad = (num) => String(num).padStart(2, "0");
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
@@ -97,8 +164,8 @@ const CashDepositForm = ({ cashDepositId }) => {
   const initialVariables = {
     bank_depositor_id: formData.bank_depositor_id,
     cashier_id: formData.cashier_id,
-    location_id: formData.location,
-    market_id: formData.market,
+    location_id: formData.location_id,
+    market_id: formData.market_id,
     bank_deposit_date_on: formData.bank_deposit_date_on,
     business_date_on: formData.business_date_on,
     deposit_date_on: formData.deposit_date_on,
@@ -127,7 +194,7 @@ const CashDepositForm = ({ cashDepositId }) => {
 
   const generateOptions = () => {
     const options = [];
-    options.push("N/A"); 
+    options.push("N/A");
     for (let i = 65; i <= 90; i++) {
       options.push(String.fromCharCode(i));
     }
@@ -143,15 +210,47 @@ const CashDepositForm = ({ cashDepositId }) => {
             refetchQueries: [{ query: GET_CASH_DEPOSITS }],
           })
         : await insertCashDeposit({
-            variables: { ...initialVariables },
+            variables: {
+              ...initialVariables,
+            },
             refetchQueries: [{ query: GET_CASH_DEPOSITS }],
           });
-      console.log(`Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`, data);
+      console.log(
+        `Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`,
+        data
+      );
       navigate("/react_cash_deposits");
     } catch (error) {
       console.error("There was an error submitting the data!", error);
     }
   };
+  // const authToken = getAuthToken();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const url = cashDepositId
+  //       ? `/cash_deposits/${cashDepositId}`
+  //       : `http://manage.lvh.me:5000/cash_deposits`;
+  //     const method = cashDepositId ? "PATCH" : "POST";
+  //     const response = await axios({
+  //       method,
+  //       url,
+  //       data: initialVariables,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "authenticity-token": authToken,
+  //       },
+  //     });
+
+  //     console.log(
+  //       `Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`,
+  //       response.data
+  //     );
+  //     navigate("/react_cash_deposits");
+  //   } catch (error) {
+  //     console.error("There was an error submitting the data!", error);
+  //   }
+  // };
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -161,11 +260,30 @@ const CashDepositForm = ({ cashDepositId }) => {
     }));
   };
 
+  if (marketsLoading) return <p>Loading markets...</p>;
+  if (marketsError) return <p>Error loading markets: {marketsError.message}</p>;
+
+  const sortedMarkets = marketsData?.markets
+    ? marketsData.markets
+        .filter((market) => market.name.trim() !== "")
+        .sort((a, b) => a.name.localeCompare(b.name))
+    : [];
+  const sortedLocations = locationsData?.locations
+    ? locationsData.locations
+        .filter((location) => location.name.trim() !== "")
+        .sort((a, b) => a.name.localeCompare(b.name))
+    : [];
+  const sortedUsers = usersData?.users
+    ? usersData.users
+        .filter((user) => user.email)
+        .sort((a, b) => a.email.localeCompare(b.email))
+    : [];
+
   return (
     <form onSubmit={handleSubmit} className="cash-deposit-form container">
       <div className="row">
         <div className="col-md-6">
-          <div className="form-group">
+          <div className="form-group col-md-6">
             <label>Deposit Type</label>
             <select
               name="deposit_type"
@@ -191,7 +309,7 @@ const CashDepositForm = ({ cashDepositId }) => {
             />
           </div>
           <div className="flexRow ">
-            <div className="form-group col-md-6">
+            <div className="form-group col-md-6 date">
               <label>Deposit Date</label>
               <input
                 type="date"
@@ -215,27 +333,40 @@ const CashDepositForm = ({ cashDepositId }) => {
             </div>
           </div>
           <div className="flexRow">
-            <div className="form-group col-md-4">
+            <div className="form-group col-md-4 market-group">
               <label>Market Group</label>
-              <input
-                type="text"
-                name="market"
-                value={formData.market}
+              <select
+                name="market_id"
+                value={formData.market_id}
                 onChange={handleChange}
                 className="form-control"
                 required
-              />
+              >
+                <option value=""></option>
+                {sortedMarkets.map((market) => (
+                  <option key={market.id} value={market.id}>
+                    {market.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="form-group col-md-4">
+
+            <div className="form-group col-md-4 location-group">
               <label>Location</label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
+              <select
+                name="location_id"
+                value={formData.location_id}
                 onChange={handleChange}
                 className="form-control"
                 required
-              />
+              >
+                <option value=""></option>
+                {sortedLocations.map((location) => (
+                  <option key={location.id} value={location.id}>
+                    {location.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group col-md-4">
               <label>Pay Machine ID</label>
@@ -265,25 +396,39 @@ const CashDepositForm = ({ cashDepositId }) => {
           </div>
           <div className="form-group">
             <label>Employee Name</label>
-            <input
-              type="text"
+            <select
               name="cashier_id"
               value={formData.cashier_id}
               onChange={handleChange}
               className="form-control"
               required
-            />
+            >
+              <option value=""></option>
+              {sortedUsers.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.email}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-group">
             <label>Bank Depositor</label>
-            <input
-              type="text"
+            <select
               name="bank_depositor_id"
               value={formData.bank_depositor_id}
               onChange={handleChange}
               className="form-control"
-            />
+              required
+            >
+              <option value=""></option>
+              {sortedUsers.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.email}
+                </option>
+              ))}
+            </select>
           </div>
+
           <div className="form-group">
             <label>Bank Account last 4 Digits</label>
             <input
@@ -296,7 +441,7 @@ const CashDepositForm = ({ cashDepositId }) => {
             />
           </div>
           <div className="flexRow">
-            <div className="form-group col-md-6">
+            <div className="form-group col-md-6 date">
               <label>Digital Pull Time</label>
               <input
                 type="datetime-local"
@@ -342,7 +487,7 @@ const CashDepositForm = ({ cashDepositId }) => {
             />
           </div>
         </div>
-        <div className="col-md-6 accounting-only">
+        <div className="col-md-5 accounting-only">
           <h2>ACCOUNTING ONLY</h2>
           <div className="form-check flex">
             <input
@@ -355,7 +500,7 @@ const CashDepositForm = ({ cashDepositId }) => {
             <label>Verified in the bank</label>
           </div>
           <div className="flex">
-            <div className="form-group col-md-6">
+            <div className="form-group col-md-6 date">
               <label>Verified Bank Deposit Date</label>
               <input
                 type="date"

@@ -16,7 +16,7 @@ const EditCashDeposit = () => {
   return (
     <div className="page-header p-4">
       <h2>Edit Cash Deposit</h2>
-      <hr />
+      <hr style={{ color: "#cfcfcf" }} />
       <CashDepositForm
         cashDepositId={parseInt(id)}
         initialData={data.cash_deposit_by_pk}

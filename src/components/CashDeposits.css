@@ -5,7 +5,7 @@
 }
 
 .filtersWidth {
-  max-width: 50%;
+  max-width: 1000px;
 }
 .buttons {
   display: flex;

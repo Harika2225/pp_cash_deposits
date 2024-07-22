@@ -2,20 +2,36 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_CASH_DEPOSITS } from "./queries/cash_deposits_query";
+import { GET_MARKETS } from "./queries/markets_query";
+import { GET_LOCATIONS } from "./queries/locations_query";
 import "./CashDeposits.css";
 import { MdOutlineSearch } from "react-icons/md";
 
 const CashDeposits = () => {
   const [deposits, setDeposits] = useState([]);
-  const { loading, error, data } = useQuery(GET_CASH_DEPOSITS);
+  const {
+    loading: depositsLoading,
+    error: depositsError,
+    data: depositsData,
+  } = useQuery(GET_CASH_DEPOSITS);
+  const {
+    loading: marketsLoading,
+    error: marketsError,
+    data: marketsData,
+  } = useQuery(GET_MARKETS);
+  const {
+    loading: locationsLoading,
+    error: locationsError,
+    data: locationsData,
+  } = useQuery(GET_LOCATIONS);
 
   const permissions = {
     canEdit: true,
   };
 
   useEffect(() => {
-    if (data && data.cash_deposits) {
-      const mappedDeposits = data.cash_deposits.map((deposit) => ({
+    if (depositsData && depositsData.cash_deposits) {
+      const mappedDeposits = depositsData.cash_deposits.map((deposit) => ({
         id: deposit.id,
         bag_number: deposit.bag_number,
         deposit_type_text:
@@ -52,7 +68,7 @@ const CashDeposits = () => {
       mappedDeposits.sort((a, b) => b.id - a.id);
       setDeposits(mappedDeposits);
     }
-  }, [data]);
+  }, [depositsData]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -85,17 +101,28 @@ const CashDeposits = () => {
     // Add your export logic here
   };
 
-  if (loading) {
+  if (depositsLoading || marketsLoading || locationsLoading) {
     return <p>Loading...</p>;
   }
 
-  if (error) {
+  if (depositsError || marketsError || locationsError) {
     return <p>Error fetching data. Please try again later.</p>;
   }
 
   if (!Array.isArray(deposits)) {
     return <p>No deposits found.</p>;
   }
+  const sortedMarkets =
+    marketsData && marketsData.markets
+      ? marketsData.markets.slice().sort((a, b) => a.name.localeCompare(b.name))
+      : [];
+
+  const sortedLocations =
+    locationsData && locationsData.locations
+      ? locationsData.locations
+          .slice()
+          .sort((a, b) => a.name.localeCompare(b.name))
+      : [];
 
   return (
     <div className="container-fluid cash-deposits-container">
@@ -146,19 +173,29 @@ const CashDeposits = () => {
           <div className="col-md-4">
             <select className="form-control">
               <option>All Markets</option>
-              {/* Add more options as needed */}
+              {sortedMarkets.map((market) => (
+                <option key={market.id} value={market.id}>
+                  {market.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-md-4">
             <select className="form-control">
               <option>All Locations</option>
-              {/* Add more options as needed */}
+              {sortedLocations.map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-md-4">
             <select className="form-control">
               <option>All Deposit Types</option>
-              {/* Add more options as needed */}
+              <option>Pay Machine</option>
+              <option>Valet</option>
+              <option>Other</option>
             </select>
           </div>
         </div>
@@ -169,8 +206,12 @@ const CashDeposits = () => {
                 type="text"
                 className="form-control date-input"
                 placeholder="Created From - Central Time (US & Canada)"
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => (e.target.type = "text")}
+                onFocus={(e) => {
+                  e.target.type = "datetime-local";
+                }}
+                onBlur={(e) => {
+                  e.target.type = "text";
+                }}
               />
             </div>
           </div>
@@ -180,8 +221,12 @@ const CashDeposits = () => {
                 type="text"
                 className="form-control date-input"
                 placeholder="Created Until - Central Time (US & Canada)"
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => (e.target.type = "text")}
+                onFocus={(e) => {
+                  e.target.type = "datetime-local";
+                }}
+                onBlur={(e) => {
+                  e.target.type = "text";
+                }}
               />
             </div>
           </div>
@@ -193,8 +238,12 @@ const CashDeposits = () => {
                 type="text"
                 className="form-control date-input"
                 placeholder="Deposit Date From - Central Time (US & Canada)"
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => (e.target.type = "text")}
+                onFocus={(e) => {
+                  e.target.type = "datetime-local";
+                }}
+                onBlur={(e) => {
+                  e.target.type = "text";
+                }}
               />
             </div>
           </div>
@@ -204,8 +253,12 @@ const CashDeposits = () => {
                 type="text"
                 className="form-control date-input"
                 placeholder="Deposit Date Until - Central Time (US & Canada)"
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => (e.target.type = "text")}
+                onFocus={(e) => {
+                  e.target.type = "datetime-local";
+                }}
+                onBlur={(e) => {
+                  e.target.type = "text";
+                }}
               />
             </div>
           </div>
