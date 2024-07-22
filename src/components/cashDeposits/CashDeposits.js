@@ -52,7 +52,7 @@ function CashDeposits() {
         bank_deposit_amount: deposit.bank_deposit_amount_cents / 100,
         formatted_bank_deposit_date_on: deposit.bank_deposit_date_on,
         variance:
-          deposit.bank_deposit_amount_cents -
+          deposit.bank_deposit_amount_cents / 100 -
           deposit.deposit_amount_cents / 100,
         shift: deposit.shift,
         bank_receipt_id: deposit.bank_receipt_id,
