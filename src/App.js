@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import './App.css';
-import CashDeposit from "./components/CashDeposits";
-import NewCashDeposit from "./components/NewCashDeposit";
-import EditCashDeposit from "./components/EditCashDeposit";
+import CashDeposit from "./components/cashDeposits/CashDeposits";
+import NewCashDeposit from "./components/cashDepositForm/NewCashDeposit";
+import EditCashDeposit from "./components/cashDepositForm/EditCashDeposit";
 
 function App() {
   return (

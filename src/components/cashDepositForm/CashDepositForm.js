@@ -3,20 +3,20 @@ import { useQuery, useMutation } from "@apollo/client";
 import {
   INSERT_CASH_DEPOSIT,
   UPDATE_CASH_DEPOSIT,
-} from "./mutations/cash_deposits_mutations";
-import "./CashDepositsForm.css";
+} from "../mutations/cash_deposits_mutations";
+import "./CashDepositForm.css";
 import { Link, useNavigate } from "react-router-dom";
 import {
   GET_CASH_DEPOSITS,
   GET_CASH_DEPOSIT_BY_ID,
-} from "./queries/cash_deposits_query";
-import { GET_MARKETS } from "./queries/markets_query";
-import { GET_LOCATIONS } from "./queries/locations_query";
-import { GET_USERS } from "./queries/users_query";
+} from "../queries/cash_deposits_query";
+import { GET_MARKETS } from "../queries/markets_query";
+import { GET_LOCATIONS } from "../queries/locations_query";
+import { GET_USERS } from "../queries/users_query";
 
-const CashDepositForm = ({ cashDepositId }) => {
+function CashDepositForm({ cashDepositId }) {
   const [formData, setFormData] = useState({
-    deposit_type: "payMachine",
+    deposit_type: "pay_machine",
     bag_number: "",
     deposit_date_on: "",
     business_date_on: "",
@@ -102,6 +102,7 @@ const CashDepositForm = ({ cashDepositId }) => {
   }, [usersLoading, usersData, cashDepositId]);
 
   useEffect(() => {
+    console.log(formData.deposit_type, "ppppppppp");
     if (!loading && data && data.cash_deposits_by_pk) {
       const {
         deposit_type,
@@ -162,6 +163,7 @@ const CashDepositForm = ({ cashDepositId }) => {
   const currentTimestamp = formatDate(now);
 
   const initialVariables = {
+    deposit_type: formData.deposit_type,
     bank_depositor_id: formData.bank_depositor_id,
     cashier_id: formData.cashier_id,
     location_id: formData.location_id,
@@ -292,7 +294,7 @@ const CashDepositForm = ({ cashDepositId }) => {
               disabled={!!cashDepositId}
               className="form-control"
             >
-              <option value="payMachine">Pay Machine</option>
+              <option value="pay_machine">Pay Machine</option>
               <option value="valet">Valet</option>
               <option value="other">Other</option>
             </select>
@@ -321,11 +323,22 @@ const CashDepositForm = ({ cashDepositId }) => {
               />
             </div>
             <div className="form-group col-md-6">
-              <label>Pull Date</label>
+              <label>
+                {formData.deposit_type === "pay_machine"
+                  ? "Pull Date"
+                  : "Bank Receipt ID"}
+              </label>
               <input
-                type="date"
-                name="business_date_on"
-                value={formData.business_date_on}
+                type={
+                  formData.deposit_type === "pay_machine"
+                    ? "business_date_on"
+                    : "bank_receipt_id"
+                }
+                value={
+                  formData.deposit_type === "pay_machine"
+                    ? formData.business_date_on
+                    : formData.bank_receipt_id
+                }
                 onChange={handleChange}
                 className="form-control"
                 required
@@ -368,21 +381,23 @@ const CashDepositForm = ({ cashDepositId }) => {
                 ))}
               </select>
             </div>
-            <div className="form-group col-md-4">
-              <label>Pay Machine ID</label>
-              <select
-                name="paystation_character"
-                value={formData.paystation_character}
-                onChange={handleChange}
-                className="form-control"
-              >
-                {generateOptions().map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {formData.deposit_type === "pay_machine" && (
+              <div className="form-group col-md-4">
+                <label>Pay Machine ID</label>
+                <select
+                  name="paystation_character"
+                  value={formData.paystation_character}
+                  onChange={handleChange}
+                  className="form-control"
+                >
+                  {generateOptions().map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
           <div className="form-group">
             <label>Deposit Amount</label>
@@ -440,41 +455,45 @@ const CashDepositForm = ({ cashDepositId }) => {
               required
             />
           </div>
-          <div className="flexRow">
-            <div className="form-group col-md-6 date">
-              <label>Digital Pull Time</label>
-              <input
-                type="datetime-local"
-                name="digital_pull_time_at"
-                value={formData.digital_pull_time_at}
-                onChange={handleChange}
-                className="form-control"
-                required
-              />
-            </div>
-            <div className="form-group col-md-6">
-              <label>Digital Pull 2 Time</label>
-              <input
-                type="datetime-local"
-                name="digital_pull_2_time_at"
-                value={formData.digital_pull_2_time_at}
-                onChange={handleChange}
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-          <div className="form-group">
-            <label>Shift</label>
-            <input
-              type="text"
-              name="shift"
-              value={formData.shift}
-              onChange={handleChange}
-              className="form-control"
-              required
-            />
-          </div>
+          {formData.deposit_type === "pay_machine" && (
+            <>
+              <div className="flexRow">
+                <div className="form-group col-md-6 date">
+                  <label>Digital Pull Time</label>
+                  <input
+                    type="datetime-local"
+                    name="digital_pull_time_at"
+                    value={formData.digital_pull_time_at}
+                    onChange={handleChange}
+                    className="form-control"
+                    required
+                  />
+                </div>
+                <div className="form-group col-md-6">
+                  <label>Digital Pull 2 Time</label>
+                  <input
+                    type="datetime-local"
+                    name="digital_pull_2_time_at"
+                    value={formData.digital_pull_2_time_at}
+                    onChange={handleChange}
+                    className="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Shift</label>
+                <input
+                  type="text"
+                  name="shift"
+                  value={formData.shift}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+            </>
+          )}
           <div className="form-group">
             <label>Attachments</label>
             <input
@@ -528,6 +547,7 @@ const CashDepositForm = ({ cashDepositId }) => {
               value={formData.bank_description}
               onChange={handleChange}
               className="form-control"
+              rows="2"
             ></textarea>
           </div>
         </div>
@@ -540,6 +560,6 @@ const CashDepositForm = ({ cashDepositId }) => {
       </Link>
     </form>
   );
-};
+}
 
 export default CashDepositForm;

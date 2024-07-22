@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_CASH_DEPOSITS } from "./queries/cash_deposits_query";
-import { GET_MARKETS } from "./queries/markets_query";
-import { GET_LOCATIONS } from "./queries/locations_query";
+import { GET_CASH_DEPOSITS } from "../queries/cash_deposits_query";
+import { GET_MARKETS } from "../queries/markets_query";
+import { GET_LOCATIONS } from "../queries/locations_query";
 import "./CashDeposits.css";
 import { MdOutlineSearch } from "react-icons/md";
 
-const CashDeposits = () => {
+function CashDeposits() {
   const [deposits, setDeposits] = useState([]);
   const {
     loading: depositsLoading,
@@ -361,6 +361,6 @@ const CashDeposits = () => {
       </table>
     </div>
   );
-};
+}
 
 export default CashDeposits;
