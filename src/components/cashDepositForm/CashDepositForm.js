@@ -326,11 +326,16 @@ function CashDepositForm({ cashDepositId }) {
         .filter((market) => market.name.trim() !== "")
         .sort((a, b) => a.name.localeCompare(b.name))
     : [];
+
+  const marketId = Number(formData?.market_id);
   const sortedLocations = locationsData?.locations
-    ? locationsData.locations
-        .filter((location) => location.name.trim() !== "")
+    ? locationsData?.locations
+        .filter((location) => 
+        location.market_id === marketId && location.name.trim() !== ""
+      )
         .sort((a, b) => a.name.localeCompare(b.name))
     : [];
+
   const sortedUsers = usersData?.users
     ? usersData.users
         .filter((user) => user.email)

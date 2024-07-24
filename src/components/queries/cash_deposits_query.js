@@ -32,6 +32,7 @@ export const GET_CASH_DEPOSITS = gql`
       }
       location {
         name
+        market_id 
       }
       cashier: users {
         email
@@ -79,6 +80,7 @@ export const GET_CASH_DEPOSIT_BY_ID = gql`
       }
       location {
         name
+        market_id
       }
       cashier: users {
         email
