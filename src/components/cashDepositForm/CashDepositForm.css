@@ -1,8 +1,14 @@
+h1{
+  font-weight: 500;
+}
 .container{
   margin-top: 30px;
   min-width: 100%;
 }
-
+.row{
+  display: flex;
+  justify-content: space-between;
+}
 .form-group {
   margin-bottom: 12px;
 }
@@ -12,8 +18,9 @@
 }
 
 label {
-  font-weight: bold;
+  font-weight: 700;
   display: block;
+  font-size: 14px;
 }
 
 .col-md-4, .col-md-6 {
@@ -39,9 +46,24 @@ textarea {
   color: #495057;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
+  border: 1px solid #ccc !important;
+  border-radius: 4px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="datetime-local"]:focus,
+input[type="file"]:focus,
+select:focus,
+textarea:focus
+{
+  border-color: #007bff; 
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5) !important; 
+}
+
+select{
+  background-color: #f9f9f9 !important;
 }
 
 .flexRow{
@@ -92,7 +114,33 @@ input[type="checkbox"] {
 
 .accounting-only {
   padding: 20px;
-  margin-left: 130px;
 }
 
+.form-group .select-container {
+  position: relative;
+}
 
+.form-group .select-container select {
+  width: 100%;
+  padding-right: 30px; 
+}
+
+.form-group .select-container .right-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px; 
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.form-group .select-container select:focus,
+.form-group .select-container select:active,
+.form-group .select-container select[value] {
+  border-color: #007bff; 
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+}
+
+.right-icon{
+  font-size: 24px;
+  color: #666
+}

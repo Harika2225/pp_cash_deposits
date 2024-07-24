@@ -36,7 +36,7 @@ function CashDeposits() {
         bag_number: deposit.bag_number,
         deposit_type_text:
           deposit.deposit_type.charAt(0).toUpperCase() +
-          deposit.deposit_type.slice(1),
+          deposit.deposit_type.slice(1).replace("_", " "),
         formatted_business_date_on: formatDate(deposit.business_date_on),
         formatted_deposit_date_on: formatDate(deposit.deposit_date_on),
         market_name: deposit.market.name,

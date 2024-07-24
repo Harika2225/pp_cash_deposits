@@ -13,6 +13,8 @@ import {
 import { GET_MARKETS } from "../queries/markets_query";
 import { GET_LOCATIONS } from "../queries/locations_query";
 import { GET_USERS } from "../queries/users_query";
+import { MdArrowDropDown } from "react-icons/md";
+import axios from "axios";
 
 function CashDepositForm({ cashDepositId }) {
   const [formData, setFormData] = useState({
@@ -305,7 +307,7 @@ function CashDepositForm({ cashDepositId }) {
       value = `${value}0`;
     }
 
-    const formattedValue = parseFloat(value) * 100; // Convert to cents
+    const formattedValue = parseFloat(value) * 100;
     setFormData((prevState) => ({
       ...prevState,
       [name]: formattedValue,
@@ -339,20 +341,26 @@ function CashDepositForm({ cashDepositId }) {
     <form onSubmit={handleSubmit} className="cash-deposit-form container">
       <div className="row">
         <div className="col-md-6">
-          <div className="form-group col-md-6">
+          <div className="form-group col-md-6 dropdown">
             <label>Deposit Type</label>
-            <select
-              name="deposit_type"
-              value={formData.deposit_type}
-              onChange={handleChange}
-              disabled={!!cashDepositId}
-              className="form-control"
-            >
-              <option value="pay_machine">Pay Machine</option>
-              <option value="valet">Valet</option>
-              <option value="other">Other</option>
-            </select>
+            <div className="select-container">
+              <select
+                name="deposit_type"
+                value={formData.deposit_type}
+                onChange={handleChange}
+                disabled={!!cashDepositId}
+                className="form-control"
+              >
+                <option value="pay_machine">Pay machine</option>
+                <option value="valet">Valet</option>
+                <option value="other">Other</option>
+              </select>
+              <span className="right-icon">
+                <MdArrowDropDown />
+              </span>
+            </div>
           </div>
+
           <div className="form-group">
             <label>Bag Number</label>
             <input
@@ -401,56 +409,71 @@ function CashDepositForm({ cashDepositId }) {
             </div>
           </div>
           <div className="flexRow">
-            <div className="form-group col-md-4 market-group">
+            <div className="form-group col-md-4 market-group dropdown">
               <label>Market Group</label>
-              <select
-                name="market_id"
-                value={formData.market_id}
-                onChange={handleChange}
-                className="form-control"
-                required
-              >
-                <option value=""></option>
-                {sortedMarkets.map((market) => (
-                  <option key={market.id} value={market.id}>
-                    {market.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group col-md-4 location-group">
-              <label>Location</label>
-              <select
-                name="location_id"
-                value={formData.location_id}
-                onChange={handleChange}
-                className="form-control"
-                required
-              >
-                <option value=""></option>
-                {sortedLocations.map((location) => (
-                  <option key={location.id} value={location.id}>
-                    {location.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {formData.deposit_type === "pay_machine" && (
-              <div className="form-group col-md-4">
-                <label>Pay Machine ID</label>
+              <div className="select-container">
                 <select
-                  name="paystation_character"
-                  value={formData.paystation_character}
+                  name="market_id"
+                  value={formData.market_id}
                   onChange={handleChange}
                   className="form-control"
+                  required
                 >
-                  {generateOptions().map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  <option value=""></option>
+                  {sortedMarkets.map((market) => (
+                    <option key={market.id} value={market.id}>
+                      {market.name}
                     </option>
                   ))}
                 </select>
+                <span className="right-icon">
+                  <MdArrowDropDown />
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group col-md-4 location-group dropdown">
+              <label>Location</label>
+              <div className="select-container">
+                <select
+                  name="location_id"
+                  value={formData.location_id}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                >
+                  <option value=""></option>
+                  {sortedLocations.map((location) => (
+                    <option key={location.id} value={location.id}>
+                      {location.name}
+                    </option>
+                  ))}
+                </select>
+                <span className="right-icon">
+                  <MdArrowDropDown />
+                </span>
+              </div>
+            </div>
+            {formData.deposit_type === "pay_machine" && (
+              <div className="form-group col-md-4 dropdown">
+                <label>Pay Machine ID</label>
+                <div className="select-container">
+                  <select
+                    name="paystation_character"
+                    value={formData.paystation_character}
+                    onChange={handleChange}
+                    className="form-control"
+                  >
+                    {generateOptions().map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="right-icon">
+                    <MdArrowDropDown />
+                  </span>
+                </div>
               </div>
             )}
           </div>
@@ -465,39 +488,49 @@ function CashDepositForm({ cashDepositId }) {
               className="form-control"
             />
           </div>
-          <div className="form-group">
+          <div className="form-group dropdown">
             <label>Employee Name</label>
-            <select
-              name="cashier_id"
-              value={formData.cashier_id}
-              onChange={handleChange}
-              className="form-control"
-              required
-            >
-              <option value=""></option>
-              {sortedUsers.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.email}
-                </option>
-              ))}
-            </select>
+            <div className="select-container">
+              <select
+                name="cashier_id"
+                value={formData.cashier_id}
+                onChange={handleChange}
+                className="form-control"
+                required
+              >
+                <option value=""></option>
+                {sortedUsers.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.email}
+                  </option>
+                ))}
+              </select>
+              <span className="right-icon">
+                <MdArrowDropDown />
+              </span>
+            </div>
           </div>
-          <div className="form-group">
+          <div className="form-group dropdown">
             <label>Bank Depositor</label>
-            <select
-              name="bank_depositor_id"
-              value={formData.bank_depositor_id}
-              onChange={handleChange}
-              className="form-control"
-              required
-            >
-              <option value=""></option>
-              {sortedUsers.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.email}
-                </option>
-              ))}
-            </select>
+            <div className="select-container">
+              <select
+                name="bank_depositor_id"
+                value={formData.bank_depositor_id}
+                onChange={handleChange}
+                className="form-control"
+                required
+              >
+                <option value=""></option>
+                {sortedUsers.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.email}
+                  </option>
+                ))}
+              </select>
+              <span className="right-icon">
+                <MdArrowDropDown />
+              </span>
+            </div>
           </div>
 
           <div className="form-group">
