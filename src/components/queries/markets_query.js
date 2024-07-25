@@ -5,6 +5,7 @@ export const GET_MARKETS = gql`
     markets {
       name
       id
+      visible
     }
   }
 `;

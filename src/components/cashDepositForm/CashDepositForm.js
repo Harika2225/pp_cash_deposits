@@ -328,11 +328,14 @@ function CashDepositForm({ cashDepositId }) {
     : [];
 
   const marketId = Number(formData?.market_id);
-  const sortedLocations = locationsData?.locations
+  const isMarketVisible = marketsData?.markets.some(
+    (market) => market.id === marketId && market.visible
+  );
+  const sortedLocations = isMarketVisible
     ? locationsData?.locations
         .filter((location) => 
-        location.market_id === marketId && location.name.trim() !== ""
-      )
+            location.market_id === marketId && location.name.trim() !== ""
+        )
         .sort((a, b) => a.name.localeCompare(b.name))
     : [];
 
