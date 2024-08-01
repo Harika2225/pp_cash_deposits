@@ -13,6 +13,7 @@ function CashDeposits() {
     loading: depositsLoading,
     error: depositsError,
     data: depositsData,
+    refetch: refetchDeposits
   } = useQuery(GET_CASH_DEPOSITS);
   const {
     loading: marketsLoading,
@@ -70,6 +71,10 @@ function CashDeposits() {
     }
   }, [depositsData]);
 
+  useEffect(() => {
+    refetchDeposits();
+  }, [refetchDeposits]);
+  
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);

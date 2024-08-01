@@ -7,7 +7,6 @@ import {
 import "./CashDepositForm.css";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  GET_CASH_DEPOSITS,
   GET_CASH_DEPOSIT_BY_ID,
 } from "../queries/cash_deposits_query";
 import { GET_MARKETS } from "../queries/markets_query";
@@ -173,8 +172,6 @@ function CashDepositForm({ cashDepositId }) {
     business_date_on: formData.business_date_on,
     deposit_date_on: formData.deposit_date_on,
     bag_number: formData.bag_number,
-    created_at: currentTimestamp,
-    updated_at: currentTimestamp,
     bank_description: formData.bank_description,
     shift: formData.shift,
     paystation_character: formData.paystation_character,
@@ -184,12 +181,9 @@ function CashDepositForm({ cashDepositId }) {
     is_verified_in_bank: formData.is_verified_in_bank,
     deposit_amount_cents: formData.deposit_amount_cents,
     bank_deposit_amount_cents: formData.bank_deposit_amount_cents,
-    files: formData.files.map((file) => file.name),
+    // files: formData.files.map((file) => file.name),
+    file: formData.files.length > 0 ? formData.files[0] : null,
   };
-
-  if (cashDepositId) {
-    initialVariables.created_at = formData.created_at;
-  }
 
   const navigate = useNavigate();
   const [insertCashDeposit] = useMutation(INSERT_CASH_DEPOSIT);
@@ -204,56 +198,72 @@ function CashDepositForm({ cashDepositId }) {
     return options;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = cashDepositId
-        ? await updateCashDeposit({
-            variables: { id: cashDepositId, ...initialVariables },
-            refetchQueries: [{ query: GET_CASH_DEPOSITS }],
-          })
-        : await insertCashDeposit({
-            variables: {
-              ...initialVariables,
-            },
-            refetchQueries: [{ query: GET_CASH_DEPOSITS }],
-          });
-      console.log(
-        `Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`,
-        data
-      );
-      navigate("/react_cash_deposits");
-    } catch (error) {
-      console.error("There was an error submitting the data!", error);
-    }
-  };
-  // const authToken = getAuthToken();
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   try {
-  //     const url = cashDepositId
-  //       ? `/cash_deposits/${cashDepositId}`
-  //       : `http://manage.lvh.me:5000/cash_deposits`;
-  //     const method = cashDepositId ? "PATCH" : "POST";
-  //     const response = await axios({
-  //       method,
-  //       url,
-  //       data: initialVariables,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "authenticity-token": authToken,
-  //       },
-  //     });
-
+  //     const { data } = cashDepositId
+  //       ? await updateCashDeposit({
+  //           variables: { id: cashDepositId, ...initialVariables },
+  //           refetchQueries: [{ query: GET_CASH_DEPOSITS }],
+  //         })
+  //       : await insertCashDeposit({
+  //           variables: {
+  //             ...initialVariables,
+  //           },
+  //           refetchQueries: [{ query: GET_CASH_DEPOSITS }],
+  //         });
   //     console.log(
   //       `Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`,
-  //       response.data
+  //       data
   //     );
   //     navigate("/react_cash_deposits");
   //   } catch (error) {
   //     console.error("There was an error submitting the data!", error);
   //   }
   // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const url = cashDepositId
+        ? `http://manage.lvh.me:5000/cash_deposits/${cashDepositId}`
+        : `http://manage.lvh.me:5000/cash_deposits`;
+      const method = cashDepositId ? "PUT" : "POST";
+
+      console.log({
+        method,
+        url,
+        data: {
+          cash_deposit: {
+            ...initialVariables,
+          },
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      const response = await axios({
+        method,
+        url,
+        data: {
+          cash_deposit: {
+            ...initialVariables,
+          },
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(
+        `Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`,
+        response.data
+      );
+      navigate("/react_cash_deposits");
+    } catch (error) {
+      console.error("There was an error submitting the data!", error);
+    }
+  };
+
   const [rawValues, setRawValues] = useState({
     deposit_amount_cents:
       (formData.deposit_amount_cents / 100).toFixed(2) || "",
@@ -333,7 +343,8 @@ function CashDepositForm({ cashDepositId }) {
   );
   const sortedLocations = isMarketVisible
     ? locationsData?.locations
-        .filter((location) => 
+        .filter(
+          (location) =>
             location.market_id === marketId && location.name.trim() !== ""
         )
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -599,7 +610,6 @@ function CashDepositForm({ cashDepositId }) {
               onChange={handleChange}
               className="form-control"
               multiple
-              required
             />
           </div>
         </div>
