@@ -181,6 +181,7 @@ function CashDepositForm({ cashDepositId }) {
     is_verified_in_bank: formData.is_verified_in_bank,
     deposit_amount_cents: formData.deposit_amount_cents,
     bank_deposit_amount_cents: formData.bank_deposit_amount_cents,
+    bank_receipt_id: formData?.bank_receipt_id,
     // files: formData.files.map((file) => file.name),
     file: formData.files.length > 0 ? formData.files[0] : null,
   };
@@ -558,6 +559,7 @@ function CashDepositForm({ cashDepositId }) {
               type="text"
               name="bank_account_last4_digits"
               value={formData.bank_account_last4_digits}
+              maxLength={4}
               onChange={handleChange}
               className="form-control"
               required
