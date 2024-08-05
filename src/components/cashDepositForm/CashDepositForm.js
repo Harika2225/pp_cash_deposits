@@ -6,9 +6,7 @@ import {
 } from "../mutations/cash_deposits_mutations";
 import "./CashDepositForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  GET_CASH_DEPOSIT_BY_ID,
-} from "../queries/cash_deposits_query";
+import { GET_CASH_DEPOSIT_BY_ID } from "../queries/cash_deposits_query";
 import { GET_MARKETS } from "../queries/markets_query";
 import { GET_LOCATIONS } from "../queries/locations_query";
 import { GET_USERS } from "../queries/users_query";
@@ -183,7 +181,7 @@ function CashDepositForm({ cashDepositId }) {
     bank_deposit_amount_cents: formData.bank_deposit_amount_cents,
     bank_receipt_id: formData?.bank_receipt_id,
     // files: formData.files.map((file) => file.name),
-    file: formData.files.length > 0 ? formData.files[0] : null,
+    // files: formData.files.length > 0 ? formData.files[0] : null,
   };
 
   const navigate = useNavigate();
@@ -231,30 +229,27 @@ function CashDepositForm({ cashDepositId }) {
         : `http://manage.lvh.me:5000/cash_deposits`;
       const method = cashDepositId ? "PUT" : "POST";
 
-      console.log({
-        method,
-        url,
-        data: {
-          cash_deposit: {
-            ...initialVariables,
-          },
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const formData = new FormData();
+      for (const key in initialVariables) {
+        if (initialVariables.hasOwnProperty(key)) {
+          formData.append(`cash_deposit[${key}]`, initialVariables[key]);
+        }
+      }
+      const fileInput = document.querySelector('input[type="file"]');
+      const files = fileInput.files;
+      for (let i = 0; i < files.length; i++) {
+        formData.append("cash_deposit[files][]", files[i]);
+      }
+
       const response = await axios({
         method,
         url,
-        data: {
-          cash_deposit: {
-            ...initialVariables,
-          },
-        },
+        data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
       console.log(
         `Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`,
         response.data
