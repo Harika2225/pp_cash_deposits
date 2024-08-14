@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import "./CashDepositForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import { GET_CASH_DEPOSIT_BY_ID } from "../queries/cash_deposits_query";
-import { GET_MARKETS } from "../queries/markets_query";
-import { GET_LOCATIONS } from "../queries/locations_query";
-import { GET_USERS } from "../queries/users_query";
+import { GET_CASH_DEPOSIT_BY_ID } from "../../graphql/queries/cash_deposits_query";
+import { GET_MARKETS } from "../../graphql/queries/markets_query";
+import { GET_LOCATIONS } from "../../graphql/queries/locations_query";
+import { GET_USERS } from "../../graphql/queries/users_query";
 import { MdArrowDropDown } from "react-icons/md";
 import axios from "axios";
 

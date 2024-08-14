@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_MARKETS } from "../queries/markets_query";
-import { GET_LOCATIONS } from "../queries/locations_query";
+import { GET_MARKETS } from "../../graphql/queries/markets_query";
+import { GET_LOCATIONS } from "../../graphql/queries/locations_query";
 import "./CashDeposits.css";
 import { MdOutlineSearch } from "react-icons/md";
 import axios from "axios";
@@ -30,7 +30,7 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
   const handleExport = () => {
     // Add your export logic here
   };
-  
+
   useEffect(() => {
     console.log(isFilterData, "Updated isFilterData");
   }, [isFilterData]);
@@ -63,15 +63,13 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
 
     const url = `/cash_deposits?${params.toString()}`;
     console.log("Generated URL:", url);
-    navigate(url);
+    // navigate(url);
 
     try {
-      const response = await axios.get(`http://manage.lvh.me:5000${url}`, {
-        params: filters,
-      });
+      const response = await axios.get(`http://manage.lvh.me:5000${url}`, {});
       console.log(response.data, "dataaaa");
       setIsFilterData(response.data);
-      console.log(isFilterData,"filter data")
+      console.log(isFilterData, "filter data");
     } catch (error) {
       console.error("Error fetching data:", error);
     }

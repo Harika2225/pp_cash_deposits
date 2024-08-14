@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_CASH_DEPOSITS } from "../queries/cash_deposits_query";
+import { GET_CASH_DEPOSITS } from "../../graphql/queries/cash_deposits_query";
 
 export default function CashDepositTable({ isFilterData }) {
   const [deposits, setDeposits] = useState([]);
