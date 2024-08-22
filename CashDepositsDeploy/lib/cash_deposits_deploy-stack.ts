@@ -33,11 +33,8 @@ interface CashDepositsDeployStackProps extends cdk.StackProps {
 
 
 export class CashDepositsDeployStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: CashDepositsDeployStackProps) {
     super(scope, id, props);
-
-    // Vpc
-
     (async () => {
       const vpc = ec2.Vpc.fromLookup(this, 'VPC', { vpcName: props.vpcName });
 
@@ -59,7 +56,7 @@ export class CashDepositsDeployStack extends cdk.Stack {
       const logDriver = ecs.LogDrivers.awsLogs({
         streamPrefix: `${env}-${prefix}-${appName}`,
         logGroup: new logs.LogGroup(this, props.logGroupName, {
-          logGroupName: props.logGroupName
+          logGroupName: props.logGroupName,
           removalPolicy: RemovalPolicy.DESTROY,
           retention: logs.RetentionDays.ONE_MONTH,
         }),
@@ -119,7 +116,7 @@ export class CashDepositsDeployStack extends cdk.Stack {
     // ============================= New Service with Single ALB START =============================
 
       const alb = elbv2.ApplicationLoadBalancer.fromLookup(this, 'ALB', {
-        loadBalancerArn: props.alb_arn,
+        loadBalancerArn: props.albArn,
       });
 
       const targetGroup = new elbv2.ApplicationTargetGroup(this, 'TargetGroup', {
@@ -155,7 +152,7 @@ export class CashDepositsDeployStack extends cdk.Stack {
       );
 
       const listener = elbv2.ApplicationListener.fromLookup(this, 'ExistingListener', {
-        listenerArn: props.listener_arn,
+        listenerArn: props.listenerArn,
       });
 
       new elbv2.ApplicationListenerRule(this, 'MyApplicationListenerRule1', {

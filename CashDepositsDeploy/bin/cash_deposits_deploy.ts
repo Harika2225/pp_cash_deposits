@@ -28,7 +28,6 @@ const cashdepositsdeploystack = new CashDepositsDeployStack(app, `${prefix}-${en
   vpcName: envConfig.vpcName,
   clusterName: envConfig.clusterName,
   repositoryName: envConfig.repositoryName,
-  //logGroupName: `${prefix}/${appName}/${env}`,
   albArn: envConfig.albArn,
   listenerArn: envConfig.listenerArn,
   logGroupName: `${prefix}/${env}/${appName}`,
@@ -37,6 +36,3 @@ const cashdepositsdeploystack = new CashDepositsDeployStack(app, `${prefix}-${en
     region: process.env.CDK_DEFAULT_REGION,
   },
 });
-
-
- 
