@@ -202,11 +202,9 @@ export default function CashDepositTable({ isFilteredData }) {
               <td>
                 {deposit.files &&
                   deposit.files.split("\n").map((file, index) => (
-                    <div key={index}>
-                      <a href={file} download>
-                        {file}
-                      </a>
-                    </div>
+                    <a key={index} href={file} download>
+                      {file}
+                    </a>
                   ))}
               </td>
               {permissions.canEdit && (

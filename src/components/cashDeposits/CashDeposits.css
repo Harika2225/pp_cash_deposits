@@ -93,7 +93,7 @@ table thead th {
 }
 .table td,
 .table th {
-  /* max-width: 350px; */
+  max-width: 350px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
