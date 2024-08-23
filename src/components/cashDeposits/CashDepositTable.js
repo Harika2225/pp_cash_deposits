@@ -15,9 +15,9 @@ export default function CashDepositTable({ isFilteredData }) {
         return {
           id: deposit.id,
           bag_number: deposit.bag_number,
-          deposit_type_text: deposit.deposit_type
-            .replace("_", " ")
-            .toUpperCase(),
+          deposit_type_text:
+            deposit.deposit_type.charAt(0).toUpperCase() +
+            deposit.deposit_type.slice(1).replace("_", " "),
           formatted_business_date_on: formatDate(deposit.business_date_on),
           formatted_deposit_date_on: formatDate(deposit.deposit_date_on),
           market_name: deposit.market_name || "",
@@ -41,7 +41,13 @@ export default function CashDepositTable({ isFilteredData }) {
           formatted_digital_pull_time_at: deposit.digital_pull_time_at,
           formatted_digital_pull_2_time_at: deposit.digital_pull_2_time_at,
           formatted_created_at: deposit.created_at,
-          files: deposit.files ? deposit.files.join("\n") : "",
+          files: deposit.files
+            ? deposit.files
+                .map((file) =>
+                  file.url.substring(file.url.lastIndexOf("/") + 1)
+                )
+                .join("\n")
+            : "",
         };
       });
       setDeposits(formattedData);
