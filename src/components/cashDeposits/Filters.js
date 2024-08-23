@@ -7,7 +7,7 @@ import "./CashDeposits.css";
 import { MdOutlineSearch } from "react-icons/md";
 import axios from "axios";
 
-const Filters = ({ isFilteredData, setisFilteredData }) => {
+const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     search: "",
@@ -44,6 +44,7 @@ const Filters = ({ isFilteredData, setisFilteredData }) => {
   };
 
   const handleFindClick = async (e) => {
+    setIsFind(true);
     e.preventDefault();
     console.log("Filters before generating URL:", filters);
     const params = new URLSearchParams();

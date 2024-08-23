@@ -5,12 +5,18 @@ import CashDepositTable from "./CashDepositTable";
 
 function CashDeposits() {
   const [isFilteredData, setisFilteredData] = useState([]);
+  const [isFind, setIsFind] = useState(false);
+
   console.log(isFilteredData, "Filtered Data");
 
   return (
     <div className="container-fluid cash-deposits-container">
-      <Filters isFilteredData={isFilteredData} setisFilteredData={setisFilteredData} />
-      <CashDepositTable isFilteredData={isFilteredData} />
+      <Filters
+        isFilteredData={isFilteredData}
+        setisFilteredData={setisFilteredData}
+        setIsFind={setIsFind}
+      />
+      <CashDepositTable isFilteredData={isFilteredData} isFind={isFind} />
     </div>
   );
 }
