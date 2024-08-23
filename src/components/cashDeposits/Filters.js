@@ -52,8 +52,14 @@ const Filters = ({ isFilteredData, setisFilteredData }) => {
     params.append("cash_deposit[market_ids][]", filters.marketId);
     params.append("cash_deposit[created_at_from]", filters.createdFrom || "");
     params.append("cash_deposit[created_at_until]", filters.createdUntil || "");
-    params.append("cash_deposit[deposit_date_on_from]", filters.depositDateFrom || "");
-    params.append("cash_deposit[deposit_date_on_until]", filters.depositDateUntil || "");
+    params.append(
+      "cash_deposit[deposit_date_on_from]",
+      filters.depositDateFrom || ""
+    );
+    params.append(
+      "cash_deposit[deposit_date_on_until]",
+      filters.depositDateUntil || ""
+    );
     params.append("commit", "Find");
 
     const url = `/cash_deposits/filter?${params.toString()}`;
@@ -91,6 +97,8 @@ const Filters = ({ isFilteredData, setisFilteredData }) => {
 
   return (
     <form onSubmit={handleFindClick}>
+      <br />
+      <a href="http://manage.lvh.me:5000">Back</a>
       <div className="container-fluid cash-deposits-container">
         <div className="page-header form-column-filters">
           <br />
@@ -194,8 +202,8 @@ const Filters = ({ isFilteredData, setisFilteredData }) => {
                   value={filters.createdFrom}
                   onChange={handleFilterChange}
                   placeholder="Created From - Central Time (US & Canada)"
-                  onFocus={(e) => e.target.type = "datetime-local"}
-                  onBlur={(e) => e.target.type = "text"}
+                  onFocus={(e) => (e.target.type = "datetime-local")}
+                  onBlur={(e) => (e.target.type = "text")}
                 />
               </div>
             </div>
@@ -208,8 +216,8 @@ const Filters = ({ isFilteredData, setisFilteredData }) => {
                   value={filters.createdUntil}
                   onChange={handleFilterChange}
                   placeholder="Created Until - Central Time (US & Canada)"
-                  onFocus={(e) => e.target.type = "datetime-local"}
-                  onBlur={(e) => e.target.type = "text"}
+                  onFocus={(e) => (e.target.type = "datetime-local")}
+                  onBlur={(e) => (e.target.type = "text")}
                 />
               </div>
             </div>
@@ -225,8 +233,8 @@ const Filters = ({ isFilteredData, setisFilteredData }) => {
                   value={filters.depositDateFrom}
                   onChange={handleFilterChange}
                   placeholder="Deposit Date From - Central Time (US & Canada)"
-                  onFocus={(e) => e.target.type = "datetime-local"}
-                  onBlur={(e) => e.target.type = "text"}
+                  onFocus={(e) => (e.target.type = "datetime-local")}
+                  onBlur={(e) => (e.target.type = "text")}
                 />
               </div>
             </div>
@@ -239,8 +247,8 @@ const Filters = ({ isFilteredData, setisFilteredData }) => {
                   value={filters.depositDateUntil}
                   onChange={handleFilterChange}
                   placeholder="Deposit Date Until - Central Time (US & Canada)"
-                  onFocus={(e) => e.target.type = "datetime-local"}
-                  onBlur={(e) => e.target.type = "text"}
+                  onFocus={(e) => (e.target.type = "datetime-local")}
+                  onBlur={(e) => (e.target.type = "text")}
                 />
               </div>
             </div>
