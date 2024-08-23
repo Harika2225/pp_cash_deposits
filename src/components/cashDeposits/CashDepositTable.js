@@ -3,15 +3,48 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_CASH_DEPOSITS } from "../../graphql/queries/cash_deposits_query";
 
-export default function CashDepositTable({ isFilterData }) {
+export default function CashDepositTable({ isFilteredData }) {
   const [deposits, setDeposits] = useState([]);
   const { data: depositsData, refetch: refetchDeposits } =
     useQuery(GET_CASH_DEPOSITS);
 
   useEffect(() => {
-    console.log(isFilterData, "isFilter");
-    if (isFilterData.length > 0) {
-      setDeposits(isFilterData);
+    console.log("Raw isFilteredData:", isFilteredData);
+    if (isFilteredData && isFilteredData.length > 0) {
+      const formattedData = isFilteredData.map((deposit) => {
+        return {
+          id: deposit.id,
+          bag_number: deposit.bag_number,
+          deposit_type_text: deposit.deposit_type
+            .replace("_", " ")
+            .toUpperCase(),
+          formatted_business_date_on: formatDate(deposit.business_date_on),
+          formatted_deposit_date_on: formatDate(deposit.deposit_date_on),
+          market_name: deposit.market_name || "",
+          location_name: deposit.location_name || "",
+          pay_machine_id: deposit.pay_machine_id,
+          deposit_amount: deposit.deposit_amount_cents / 100,
+          cashier_email: deposit.cashier_email || "",
+          bank_depositor_email: deposit.bank_depositor_email || "",
+          is_verified_in_bank: deposit.is_verified_in_bank ? "Yes" : "No",
+          bank_description: deposit.bank_description,
+          bank_account_last4_digits: deposit.bank_account_last4_digits,
+          bank_deposit_amount: deposit.bank_deposit_amount_cents / 100,
+          formatted_bank_deposit_date_on: formatDate(
+            deposit.bank_deposit_date_on
+          ),
+          variance:
+            (deposit.bank_deposit_amount_cents - deposit.deposit_amount_cents) /
+            100,
+          shift: deposit.shift,
+          bank_receipt_id: deposit.bank_receipt_id,
+          formatted_digital_pull_time_at: deposit.digital_pull_time_at,
+          formatted_digital_pull_2_time_at: deposit.digital_pull_2_time_at,
+          formatted_created_at: deposit.created_at,
+          files: deposit.files ? deposit.files.join("\n") : "",
+        };
+      });
+      setDeposits(formattedData);
     } else if (depositsData && depositsData.cash_deposits) {
       const mappedDeposits = depositsData.cash_deposits.map((deposit) => ({
         id: deposit.id,
@@ -50,7 +83,7 @@ export default function CashDepositTable({ isFilterData }) {
       mappedDeposits.sort((a, b) => b.id - a.id);
       setDeposits(mappedDeposits);
     }
-  }, [depositsData, isFilterData]);
+  }, [depositsData, isFilteredData]);
 
   useEffect(() => {
     refetchDeposits();

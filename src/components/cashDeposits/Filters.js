@@ -7,7 +7,7 @@ import "./CashDeposits.css";
 import { MdOutlineSearch } from "react-icons/md";
 import axios from "axios";
 
-const Filters = ({ isFilterData, setIsFilterData }) => {
+const Filters = ({ isFilteredData, setisFilteredData }) => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     search: "",
@@ -32,8 +32,8 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
   };
 
   useEffect(() => {
-    console.log(isFilterData, "Updated isFilterData");
-  }, [isFilterData]);
+    console.log(isFilteredData, "Updated isFilteredData");
+  }, [isFilteredData]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -43,7 +43,8 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
     }));
   };
 
-  const handleFindClick = async () => {
+  const handleFindClick = async (e) => {
+    e.preventDefault();
     console.log("Filters before generating URL:", filters);
     const params = new URLSearchParams();
 
@@ -51,25 +52,18 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
     params.append("cash_deposit[market_ids][]", filters.marketId);
     params.append("cash_deposit[created_at_from]", filters.createdFrom || "");
     params.append("cash_deposit[created_at_until]", filters.createdUntil || "");
-    params.append(
-      "cash_deposit[deposit_date_on_from]",
-      filters.depositDateFrom || ""
-    );
-    params.append(
-      "cash_deposit[deposit_date_on_until]",
-      filters.depositDateUntil || ""
-    );
+    params.append("cash_deposit[deposit_date_on_from]", filters.depositDateFrom || "");
+    params.append("cash_deposit[deposit_date_on_until]", filters.depositDateUntil || "");
     params.append("commit", "Find");
 
-    const url = `/cash_deposits?${params.toString()}`;
+    const url = `/cash_deposits/filter?${params.toString()}`;
     console.log("Generated URL:", url);
-    // navigate(url);
 
     try {
-      const response = await axios.get(`http://manage.lvh.me:5000${url}`, {});
-      console.log(response.data, "dataaaa");
-      setIsFilterData(response.data);
-      console.log(isFilterData, "filter data");
+      const response = await axios.get(`http://manage.lvh.me:5000${url}`);
+      console.log("Response data:", response.data);
+      setisFilteredData(response.data);
+      console.log("Filter data set:", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -85,7 +79,7 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
   const isMarketVisible = marketsData?.markets.some(
     (market) => market.id === marketId && market.visible
   );
-  console.log(marketId, isMarketVisible, "markettt");
+  console.log(marketId, isMarketVisible, "Market:");
   const sortedLocations = isMarketVisible
     ? locationsData?.locations
         .filter(
@@ -200,12 +194,8 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
                   value={filters.createdFrom}
                   onChange={handleFilterChange}
                   placeholder="Created From - Central Time (US & Canada)"
-                  onFocus={(e) => {
-                    e.target.type = "datetime-local";
-                  }}
-                  onBlur={(e) => {
-                    e.target.type = "text";
-                  }}
+                  onFocus={(e) => e.target.type = "datetime-local"}
+                  onBlur={(e) => e.target.type = "text"}
                 />
               </div>
             </div>
@@ -218,16 +208,13 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
                   value={filters.createdUntil}
                   onChange={handleFilterChange}
                   placeholder="Created Until - Central Time (US & Canada)"
-                  onFocus={(e) => {
-                    e.target.type = "datetime-local";
-                  }}
-                  onBlur={(e) => {
-                    e.target.type = "text";
-                  }}
+                  onFocus={(e) => e.target.type = "datetime-local"}
+                  onBlur={(e) => e.target.type = "text"}
                 />
               </div>
             </div>
           </div>
+
           <div className="row mb-3">
             <div className="col-md-6">
               <div className="date-wrapper">
@@ -238,12 +225,8 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
                   value={filters.depositDateFrom}
                   onChange={handleFilterChange}
                   placeholder="Deposit Date From - Central Time (US & Canada)"
-                  onFocus={(e) => {
-                    e.target.type = "datetime-local";
-                  }}
-                  onBlur={(e) => {
-                    e.target.type = "text";
-                  }}
+                  onFocus={(e) => e.target.type = "datetime-local"}
+                  onBlur={(e) => e.target.type = "text"}
                 />
               </div>
             </div>
@@ -256,16 +239,13 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
                   value={filters.depositDateUntil}
                   onChange={handleFilterChange}
                   placeholder="Deposit Date Until - Central Time (US & Canada)"
-                  onFocus={(e) => {
-                    e.target.type = "datetime-local";
-                  }}
-                  onBlur={(e) => {
-                    e.target.type = "text";
-                  }}
+                  onFocus={(e) => e.target.type = "datetime-local"}
+                  onBlur={(e) => e.target.type = "text"}
                 />
               </div>
             </div>
           </div>
+
           <div className="d-flex justify-content-end">
             <button
               className="btn btn-primary findButton"
@@ -274,6 +254,7 @@ const Filters = ({ isFilterData, setIsFilterData }) => {
               Find
             </button>
           </div>
+
           <hr />
         </div>
       </div>
