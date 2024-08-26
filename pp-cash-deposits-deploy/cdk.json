@@ -23,10 +23,6 @@
     "appName": "cashdeposits",
     "ui": "ui",
     "dev": {
-      "vpcName": "DevVpc",
-      "containerName": "cash-deposits",
-      "clusterName": "test-tekton",
-      "repositoryName": "tekton-registry",
       "albArn": "arn:aws:elasticloadbalancing:us-east-2:855770807483:loadbalancer/app/demo-alb/9d32c588a70766c9",
       "listenerArn": "arn:aws:elasticloadbalancing:us-east-2:855770807483:listener/app/demo-alb/9d32c588a70766c9/460d925b63411af5",
       "createKmsKey": false,
@@ -36,10 +32,6 @@
       },
 
     "prod": {
-      "vpcName": "DevVpc",
-      "containerName": "cash-deposits",
-      "clusterName": "test-tekton",
-      "repositoryName": "tekton-registry",
       "albArn": "arn:aws:elasticloadbalancing:us-east-2:855770807483:loadbalancer/app/demo-alb/9d32c588a70766c9",
       "listenerArn": "arn:aws:elasticloadbalancing:us-east-2:855770807483:listener/app/demo-alb/9d32c588a70766c9/460d925b63411af5",
       "createKmsKey": false,
