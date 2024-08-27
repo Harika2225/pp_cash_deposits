@@ -28,8 +28,56 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
     canEdit: true,
   };
 
-  const handleExport = () => {
-    // Add your export logic here
+  const handleExport = async (e) => {
+    e.preventDefault();
+    console.log("Filters before generating export URL:", filters);
+    const params = new URLSearchParams();
+
+    params.append("report[additional_data][search]", filters.search || "");
+    params.append(
+      "report[additional_data][created_at_from]",
+      filters.createdFrom || ""
+    );
+    params.append(
+      "report[additional_data][created_at_until]",
+      filters.createdUntil || ""
+    );
+    params.append(
+      "report[additional_data][deposit_date_on_from]",
+      filters.depositDateFrom || ""
+    );
+    params.append(
+      "report[additional_data][deposit_date_on_until]",
+      filters.depositDateUntil || ""
+    );
+    params.append("report[kind]", "cash_deposits");
+
+    filters.marketId.forEach((id) => {
+      params.append("report[additional_data][market_ids][]", id);
+    });
+
+    filters.locationId.forEach((id) => {
+      params.append("report[additional_data][location_ids][]", id);
+    });
+
+    filters.depositType.forEach((type) => {
+      params.append("report[additional_data][deposit_types][]", type);
+    });
+
+    const url = `http://manage.lvh.me:5000/reports?${params.toString()}`;
+    console.log("Generated URL:", url);
+
+    try {
+      const response = await axios.get(url);
+      console.log("Response data:", response.data);
+      console.log(response.status,"statussss")
+      if (response.status === 200) {
+        window.location.href = "http://manage.lvh.me:5000/reports";
+      }
+      console.log("Export data set:", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
