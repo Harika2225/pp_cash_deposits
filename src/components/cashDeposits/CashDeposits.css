@@ -27,7 +27,6 @@
   border-radius: 4px;
   cursor: pointer;
   height: 35px;
-
 }
 
 table {
@@ -40,7 +39,6 @@ table {
   background-color: #337ab7 !important;
   border-color: #2e6da4;
   height: 35px;
-
 }
 .exportButton {
   background-color: #5bc0de;
@@ -53,11 +51,11 @@ table {
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 8px;
-  transition: border-color 0.15s ease-in-out; 
+  transition: border-color 0.15s ease-in-out;
 }
 
 .search-input-container:focus-within {
-  border-color: #007bff; 
+  border-color: #007bff;
 }
 
 .left-icon {
@@ -65,13 +63,13 @@ table {
   display: flex;
   align-items: center;
   justify-content: center;
-  height:100%;
+  height: 100%;
 }
 
 .left-icon svg {
   color: #555;
   background-color: #eee;
-  height:100%;
+  height: 100%;
   font-size: 45px;
   padding: 8px;
   border-top-left-radius: 8px;
@@ -79,9 +77,8 @@ table {
   border-right: 1px solid #ccc;
 }
 
-
 .search-input-container .form-control {
-  border:none;
+  border: none;
   padding-left: 60px;
 }
 
@@ -105,4 +102,33 @@ table tbody tr:nth-child(even) {
 table tbody td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
+}
+
+.basic-multi-select .select__control {
+  align-content: center;
+  border-radius: 4px;
+  min-height: 38px;
+  height: auto;
+}
+
+.basic-multi-select .select__value-container {
+  min-height: 38px;
+  padding: 0 8px;
+  height: auto !important;
+}
+
+.basic-multi-select .select__indicators {
+  height: 38px;
+}
+
+#react-select-2-input,
+#react-select-3-input,
+#react-select-4-input {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }

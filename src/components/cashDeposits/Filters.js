@@ -6,14 +6,15 @@ import { GET_LOCATIONS } from "../../graphql/queries/locations_query";
 import "./CashDeposits.css";
 import { MdOutlineSearch } from "react-icons/md";
 import axios from "axios";
+import Select from "react-select";
 
 const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     search: "",
-    marketId: "",
-    locationId: "",
-    depositType: "",
+    marketId: [],
+    locationId: [],
+    depositType: [],
     createdFrom: "",
     createdUntil: "",
     depositDateFrom: "",
@@ -50,7 +51,6 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
     const params = new URLSearchParams();
 
     params.append("cash_deposit[search]", filters.search || "");
-    params.append("cash_deposit[market_ids][]", filters.marketId);
     params.append("cash_deposit[created_at_from]", filters.createdFrom || "");
     params.append("cash_deposit[created_at_until]", filters.createdUntil || "");
     params.append(
@@ -62,6 +62,18 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
       filters.depositDateUntil || ""
     );
     params.append("commit", "Find");
+
+    filters.marketId.forEach((id) => {
+      params.append("cash_deposit[market_ids][]", id);
+    });
+
+    filters.locationId.forEach((id) => {
+      params.append("cash_deposit[location_ids][]", id);
+    });
+
+    filters.depositType.forEach((type) => {
+      params.append("cash_deposit[deposit_types][]", type);
+    });
 
     const url = `/cash_deposits/filter?${params.toString()}`;
     console.log("Generated URL:", url);
@@ -81,20 +93,63 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
         .filter((market) => market.name.trim() !== "")
         .sort((a, b) => a.name.localeCompare(b.name))
     : [];
-
-  const marketId = Number(filters?.marketId);
-  const isMarketVisible = marketsData?.markets.some(
-    (market) => market.id === marketId && market.visible
-  );
-  console.log(marketId, isMarketVisible, "Market:");
-  const sortedLocations = isMarketVisible
-    ? locationsData?.locations
-        .filter(
-          (location) =>
-            location.market_id === marketId && location.name.trim() !== ""
-        )
+  const sortedLocations = locationsData?.locations
+    ? locationsData.locations
+        .filter((location) => location.name.trim() !== "")
         .sort((a, b) => a.name.localeCompare(b.name))
     : [];
+
+  const handleMarketChange = (selectedOptions) => {
+    const selectedMarketIds = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      marketId: selectedMarketIds,
+      locationId: [],
+    }));
+  };
+  const handleLocationChange = (selectedOptions) => {
+    const selectedLocationIds = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      locationId: selectedLocationIds,
+    }));
+  };
+  const handleDepositTypeChange = (selectedOptions) => {
+    const selectedDepositTypes = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      depositType: selectedDepositTypes,
+    }));
+  };
+
+  const marketOptions = sortedMarkets.map((market) => ({
+    value: market.id,
+    label: market.name,
+  }));
+  const selectedMarketOptions = marketOptions.filter((option) =>
+    filters.marketId.includes(option.value)
+  );
+
+  const locationOptions = sortedLocations.map((location) => ({
+    value: location.id,
+    label: location.name,
+  }));
+
+  const selectedLocationOptions = locationOptions.filter((option) =>
+    filters.locationId.includes(option.value)
+  );
+
+  const depositTypeOptions = [
+    { value: "pay_machine", label: "Pay Machine" },
+    { value: "valet", label: "Valet" },
+    { value: "other", label: "Other" },
+  ];
 
   return (
     <form onSubmit={handleFindClick}>
@@ -149,48 +204,54 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
 
           <div className="row mb-3">
             <div className="col-md-4">
-              <select
+              <Select
+                isMulti
                 name="marketId"
-                className="form-control"
-                value={filters.marketId}
-                onChange={handleFilterChange}
-              >
-                <option>All Markets</option>
-                {sortedMarkets.map((market) => (
-                  <option key={market.id} value={market.id}>
-                    {market.name}
-                  </option>
-                ))}
-              </select>
+                options={marketOptions}
+                value={selectedMarketOptions}
+                onChange={handleMarketChange}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                placeholder="All Markets"
+                components={{
+                  DropdownIndicator: null,
+                  IndicatorSeparator: null,
+                }}
+              />
             </div>
             <div className="col-md-4">
-              <select
+              <Select
+                isMulti
                 name="locationId"
-                className="form-control"
-                value={filters.locationId}
-                onChange={handleFilterChange}
-              >
-                {" "}
-                <option>All Locations</option>
-                {sortedLocations.map((location) => (
-                  <option key={location.id} value={location.id}>
-                    {location.name}
-                  </option>
-                ))}
-              </select>
+                options={locationOptions}
+                value={selectedLocationOptions}
+                onChange={handleLocationChange}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                placeholder="All Locations"
+                components={{
+                  DropdownIndicator: null,
+                  IndicatorSeparator: null,
+                }}
+              />
             </div>
             <div className="col-md-4">
-              <select
+              <Select
+                isMulti
                 name="depositType"
-                className="form-control"
-                value={filters.depositType}
-                onChange={handleFilterChange}
-              >
-                <option>All Deposit Types</option>
-                <option>Pay Machine</option>
-                <option>Valet</option>
-                <option>Other</option>
-              </select>
+                options={depositTypeOptions}
+                value={depositTypeOptions.filter((option) =>
+                  filters.depositType.includes(option.value)
+                )}
+                onChange={handleDepositTypeChange}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                placeholder="All Deposit Types"
+                components={{
+                  DropdownIndicator: null,
+                  IndicatorSeparator: null,
+                }}
+              />
             </div>
           </div>
           <div className="row mb-3">
