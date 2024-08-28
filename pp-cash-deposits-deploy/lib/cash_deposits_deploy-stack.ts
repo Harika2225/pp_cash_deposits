@@ -35,7 +35,6 @@ interface CashDepositsDeployStackProps extends cdk.StackProps {
 export class CashDepositsDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: CashDepositsDeployStackProps) {
     super(scope, id, props);
-    (async () => {
       const vpc = ec2.Vpc.fromLookup(this, 'VPC', { vpcName: props.vpcName });
 
       const cluster = ecs.Cluster.fromClusterAttributes(
@@ -62,11 +61,11 @@ export class CashDepositsDeployStack extends cdk.Stack {
         }),
       });
 
-    //  task definition for SPA
       const taskDefinition_cashdeposits = new ecs.FargateTaskDefinition(this, `${prefix}-${appName}-${env}-taskdef`, {
         memoryLimitMiB: props.memory,
         cpu: props.cpu,
-      });
+      });    //  task definition for SPA
+
 
       const containerPort = props.containerPort;
 
@@ -136,7 +135,7 @@ export class CashDepositsDeployStack extends cdk.Stack {
         assignPublicIp: true,
         desiredCount: 1,
         vpcSubnets: {
-          subnetType: SubnetType.PRIVATE_WITH_EGRESS,
+          subnetType: SubnetType.PUBLIC,
         },
         taskDefinition: taskDefinition_cashdeposits,
         serviceName: `${props.containerName}`,
@@ -164,8 +163,6 @@ export class CashDepositsDeployStack extends cdk.Stack {
           elbv2.ListenerCondition.pathPatterns(['*']),
         ],
       });
-
-    })
 
     // ============================= New Service with Single ALB END =============================
   }

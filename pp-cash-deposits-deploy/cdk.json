@@ -26,10 +26,11 @@
       "albArn": "arn:aws:elasticloadbalancing:us-east-2:201771159450:loadbalancer/app/pp-dev-alb/a401568cea2c0fee",
       "listenerArn": "arn:aws:elasticloadbalancing:us-east-2:201771159450:listener/app/pp-dev-alb/a401568cea2c0fee/d5498b8dcd6e67f0",
       "createKmsKey": false,
-      "containerPort": "3000",
-      "cpu": "1024",
-      "memory": "2048",
-      "clusterName": "DevCluster"
+      "containerPort": 3000,
+      "cpu": 1024,
+      "memory": 2048,
+      "clusterName": "DevCluster",
+      "containerName": "web"
       },
 
     "prod": {
