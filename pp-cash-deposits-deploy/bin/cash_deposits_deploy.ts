@@ -19,8 +19,8 @@ if (!envConfig) {
 }
 
 export const vpcName = `${prefix}-${env}`;
-export const clusterName = `${prefix}-${appName}-${env}`;
-export const repositoryName = `${prefix}-${appName}-${env}`;
+// export const repositoryName = `${prefix}-${appName}-${env}`;
+export const repositoryName = `tekton-testing`;
 export const loadBalancerName = `${prefix}-${appName}-${env}-lb`;
 export const logGroupName = `${prefix}/${appName}/${env}`;
 
@@ -28,13 +28,13 @@ const cashdepositsdeploystack = new CashDepositsDeployStack(
   app,
   `${prefix}-${env}-${appName}-DeployStack`,
   {
-    stackName: `${prefix}-${env}-${appName}-DeployStack`,
+    stackName: `${prefix}-${env}-${appName}`,
     containerName: envConfig.containerName,
     cpu: envConfig.cpu,
     memory: envConfig.memory,
     containerPort: envConfig.containerPort,
     vpcName: vpcName,
-    clusterName: clusterName,
+    clusterName: envConfig.clusterName,
     repositoryName: repositoryName,
     albArn: envConfig.albArn,
     listenerArn: envConfig.listenerArn,

@@ -23,12 +23,13 @@
     "appName": "cashdeposits",
     "ui": "ui",
     "dev": {
-      "albArn": "arn:aws:elasticloadbalancing:us-east-2:855770807483:loadbalancer/app/demo-alb/9d32c588a70766c9",
-      "listenerArn": "arn:aws:elasticloadbalancing:us-east-2:855770807483:listener/app/demo-alb/9d32c588a70766c9/460d925b63411af5",
+      "albArn": "arn:aws:elasticloadbalancing:us-east-2:201771159450:loadbalancer/app/pp-dev-alb/a401568cea2c0fee",
+      "listenerArn": "arn:aws:elasticloadbalancing:us-east-2:201771159450:listener/app/pp-dev-alb/a401568cea2c0fee/d5498b8dcd6e67f0",
       "createKmsKey": false,
       "containerPort": "3000",
       "cpu": "1024",
-      "memory": "2048"
+      "memory": "2048",
+      "clusterName": "DevCluster"
       },
 
     "prod": {
