@@ -26,7 +26,7 @@ export const logGroupName = `${prefix}/${appName}/${env}`;
 
 const cashdepositsdeploystack = new CashDepositsDeployStack(
   app,
-  `${prefix}-${env}-${appName}-DeployStack`,
+  `${prefix}-${env}-${appName}`,
   {
     stackName: `${prefix}-${env}-${appName}`,
     containerName: envConfig.containerName,
