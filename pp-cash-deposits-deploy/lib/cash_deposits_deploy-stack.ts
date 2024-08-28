@@ -154,15 +154,6 @@ export class CashDepositsDeployStack extends cdk.Stack {
         listenerArn: props.listenerArn,
       });
 
-      new elbv2.ApplicationListenerRule(this, 'MyApplicationListenerRule1', {
-        listener: listener,
-        priority: 12,
-        action: elbv2.ListenerAction.forward([targetGroup]),
-        conditions: [
-          //elbv2.ListenerCondition.hostHeaders(['textpay.premiumparking.com', 'camerapay.premiumparking.com']),
-          elbv2.ListenerCondition.pathPatterns(['*']),
-        ],
-      });
 
     // ============================= New Service with Single ALB END =============================
   }
