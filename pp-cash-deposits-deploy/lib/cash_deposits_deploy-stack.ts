@@ -99,7 +99,18 @@ export class CashDepositsDeployStack extends cdk.Stack {
     //     `${environment}-${prefix}-${appName}-secretcert`,
     //     `${environment}/infra/certificate`,
     //   );
+    //   const certificateArnSecret = secretsmanager.Secret.fromSecretNameV2(
+    //     this,
+    //     `${environment}-${prefix}-${appName}-secretcert`,
+    //     `${environment}/infra/certificate`,
+    //   );
 
+    // // const certificateArn = certificateArnSecret.secretValueFromJson('arn').toString();
+    //   const certificate = Certificate.fromCertificateArn(
+    //     this,
+    //     `${prefix}-cert`,
+    //     certificateArnSecret.secretValueFromJson('arn').unsafeUnwrap(),
+    //   );
     // // const certificateArn = certificateArnSecret.secretValueFromJson('arn').toString();
     //   const certificate = Certificate.fromCertificateArn(
     //     this,
@@ -113,13 +124,33 @@ export class CashDepositsDeployStack extends cdk.Stack {
     //     `alias/${projectName}-${environment}-ecr-key`,
     //     `alias/${projectName}-${environment}-ecs-key`,
     //   ];
+    // // Define an array of KMS key aliases to look up
+    //   const kmsAliases = [
+    //     `alias/${projectName}-${environment}-secret-key`,
+    //     `alias/${projectName}-${environment}-ecr-key`,
+    //     `alias/${projectName}-${environment}-ecs-key`,
+    //   ];
 
     //   const kmsKeys = kmsAliases.map(alias =>
     //     kms.Key.fromLookup(this, `${alias}-lookup`, {
     //       aliasName: alias,
     //     }),
     //   );
+    //   const kmsKeys = kmsAliases.map(alias =>
+    //     kms.Key.fromLookup(this, `${alias}-lookup`, {
+    //       aliasName: alias,
+    //     }),
+    //   );
 
+    //   for (const key of kmsKeys) {
+    //     taskDefinition_textpay.addToTaskRolePolicy(
+    //       new iam.PolicyStatement({
+    //         effect: iam.Effect.ALLOW,
+    //         actions: ['kms:Decrypt'],
+    //         resources: [key.keyArn],
+    //       }),
+    //     );
+    //   }
     //   for (const key of kmsKeys) {
     //     taskDefinition_textpay.addToTaskRolePolicy(
     //       new iam.PolicyStatement({
