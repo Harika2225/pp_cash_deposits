@@ -153,6 +153,10 @@ export class CashDepositsDeployStack extends cdk.Stack {
       const listener = elbv2.ApplicationListener.fromLookup(this, 'ExistingListener', {
         listenerArn: props.listenerArn,
       });
+      
+      listener.addTargetGroups(`${prefix}-${appName}-${env}-listener-target-group`, {
+        targetGroups: [targetGroup],
+      });
 
 
     // ============================= New Service with Single ALB END =============================
