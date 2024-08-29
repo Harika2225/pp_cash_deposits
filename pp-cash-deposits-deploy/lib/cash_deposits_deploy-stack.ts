@@ -76,41 +76,41 @@ export class CashDepositsDeployStack extends cdk.Stack {
         logging: logDriver,
       });
 
-    //   const certificateArnSecret = secretsmanager.Secret.fromSecretNameV2(
-    //     this,
-    //     `${environment}-${prefix}-${appName}-secretcert`,
-    //     `${environment}/infra/certificate`,
-    //   );
+      const certificateArnSecret = secretsmanager.Secret.fromSecretNameV2(
+        this,
+        `${environment}-${prefix}-${appName}-secretcert`,
+        `${environment}/infra/certificate`,
+      );
 
-    // // const certificateArn = certificateArnSecret.secretValueFromJson('arn').toString();
-    //   const certificate = Certificate.fromCertificateArn(
-    //     this,
-    //     `${prefix}-cert`,
-    //     certificateArnSecret.secretValueFromJson('arn').unsafeUnwrap(),
-    //   );
+    // const certificateArn = certificateArnSecret.secretValueFromJson('arn').toString();
+      const certificate = Certificate.fromCertificateArn(
+        this,
+        `${prefix}-cert`,
+        certificateArnSecret.secretValueFromJson('arn').unsafeUnwrap(),
+      );
 
-    // // Define an array of KMS key aliases to look up
-    //   const kmsAliases = [
-    //     `alias/${projectName}-${environment}-secret-key`,
-    //     `alias/${projectName}-${environment}-ecr-key`,
-    //     `alias/${projectName}-${environment}-ecs-key`,
-    //   ];
+    // Define an array of KMS key aliases to look up
+      const kmsAliases = [
+        `alias/${projectName}-${environment}-secret-key`,
+        `alias/${projectName}-${environment}-ecr-key`,
+        `alias/${projectName}-${environment}-ecs-key`,
+      ];
 
-    //   const kmsKeys = kmsAliases.map(alias =>
-    //     kms.Key.fromLookup(this, `${alias}-lookup`, {
-    //       aliasName: alias,
-    //     }),
-    //   );
+      const kmsKeys = kmsAliases.map(alias =>
+        kms.Key.fromLookup(this, `${alias}-lookup`, {
+          aliasName: alias,
+        }),
+      );
 
-    //   for (const key of kmsKeys) {
-    //     taskDefinition_textpay.addToTaskRolePolicy(
-    //       new iam.PolicyStatement({
-    //         effect: iam.Effect.ALLOW,
-    //         actions: ['kms:Decrypt'],
-    //         resources: [key.keyArn],
-    //       }),
-    //     );
-    //   }
+      for (const key of kmsKeys) {
+        taskDefinition_textpay.addToTaskRolePolicy(
+          new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ['kms:Decrypt'],
+            resources: [key.keyArn],
+          }),
+        );
+      }
 
     // ============================= New Service with Single ALB START =============================
 
@@ -152,6 +152,16 @@ export class CashDepositsDeployStack extends cdk.Stack {
 
       const listener = elbv2.ApplicationListener.fromLookup(this, 'ExistingListener', {
         listenerArn: props.listenerArn,
+      });
+
+      new elbv2.ApplicationListenerRule(this, 'MyApplicationListenerRule2', {
+        listener: props.listenerArn,
+        priority: 21,
+        action: elbv2.ListenerAction.forward([targetGroup]),
+        conditions: [
+          elbv2.ListenerCondition.hostHeaders(['www.dev.premiumparking.com', 'blog.dev.premiumparking.com']),
+          elbv2.ListenerCondition.pathPatterns(['*']),
+        ],
       });
 
 
