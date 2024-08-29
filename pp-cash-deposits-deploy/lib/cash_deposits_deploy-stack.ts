@@ -78,8 +78,8 @@ export class CashDepositsDeployStack extends cdk.Stack {
 
       const certificateArnSecret = secretsmanager.Secret.fromSecretNameV2(
         this,
-        `${environment}-${prefix}-${appName}-secretcert`,
-        `${environment}/infra/certificate`,
+        `${env}-${prefix}-${appName}-secretcert`,
+        `${env}/infra/certificate`,
       );
 
     // const certificateArn = certificateArnSecret.secretValueFromJson('arn').toString();
@@ -91,9 +91,9 @@ export class CashDepositsDeployStack extends cdk.Stack {
 
     // Define an array of KMS key aliases to look up
       const kmsAliases = [
-        `alias/${projectName}-${environment}-secret-key`,
-        `alias/${projectName}-${environment}-ecr-key`,
-        `alias/${projectName}-${environment}-ecs-key`,
+        `alias/${projectName}-${env}-secret-key`,
+        `alias/${projectName}-${env}-ecr-key`,
+        `alias/${projectName}-${env}-ecs-key`,
       ];
 
       const kmsKeys = kmsAliases.map(alias =>
