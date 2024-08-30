@@ -64,15 +64,17 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
       params.append("report[additional_data][deposit_types][]", type);
     });
 
-    const url = `http://manage.lvh.me:5000/reports?${params.toString()}`;
+    const url = `${
+      process.env.REACT_APP_RAILS_BACKEND
+    }/reports?${params.toString()}`;
     console.log("Generated URL:", url);
 
     try {
       const response = await axios.get(url);
       console.log("Response data:", response.data);
-      console.log(response.status,"statussss")
+      console.log(response.status, "statussss");
       if (response.status === 200) {
-        window.location.href = "http://manage.lvh.me:5000/reports";
+        window.location.href = `${process.env.REACT_APP_RAILS_BACKEND}/reports`;
       }
       console.log("Export data set:", response.data);
     } catch (error) {
@@ -127,7 +129,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
     console.log("Generated URL:", url);
 
     try {
-      const response = await axios.get(`http://manage.lvh.me:5000${url}`);
+      const response = await axios.get(`${process.env.REACT_APP_RAILS_BACKEND}${url}`);
       console.log("Response data:", response.data);
       setisFilteredData(response.data);
       console.log("Filter data set:", response.data);
@@ -202,7 +204,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
   return (
     <form onSubmit={handleFindClick}>
       <br />
-      <a href="http://manage.lvh.me:5000">Back</a>
+      <a href={process.env.REACT_APP_RAILS_BACKEND}>Back</a>
       <div className="container-fluid cash-deposits-container">
         <div className="page-header form-column-filters">
           <br />

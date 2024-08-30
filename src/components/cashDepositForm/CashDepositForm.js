@@ -192,8 +192,8 @@ function CashDepositForm({ cashDepositId }) {
     e.preventDefault();
     try {
       const url = cashDepositId
-        ? `http://manage.lvh.me:5000/cash_deposits/${cashDepositId}`
-        : `http://manage.lvh.me:5000/cash_deposits`;
+      ? `${process.env.REACT_APP_CASH_DEPOSITS}/${cashDepositId}`
+      : process.env.REACT_APP_CASH_DEPOSITS;    
       const method = cashDepositId ? "PUT" : "POST";
 
       const formData = new FormData();
