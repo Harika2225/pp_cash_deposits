@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_MARKETS } from "../../graphql/queries/markets_query";
 import { GET_LOCATIONS } from "../../graphql/queries/locations_query";
@@ -9,7 +9,6 @@ import axios from "axios";
 import Select from "react-select";
 
 const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
-  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     search: "",
     marketId: [],

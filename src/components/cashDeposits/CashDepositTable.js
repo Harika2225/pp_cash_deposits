@@ -94,7 +94,7 @@ export default function CashDepositTable({ isFilteredData, isFind }) {
       mappedDeposits.sort((a, b) => b.id - a.id);
       setDeposits(mappedDeposits);
     }
-  }, [depositsData, isFilteredData]);
+  }, [depositsData, isFilteredData, isFind]);
 
   useEffect(() => {
     refetchDeposits();

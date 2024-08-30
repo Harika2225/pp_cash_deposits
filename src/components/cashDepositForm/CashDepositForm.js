@@ -38,7 +38,7 @@ function CashDepositForm({ cashDepositId }) {
     bank_description: "",
   });
 
-  const { loading, error, data } = useQuery(GET_CASH_DEPOSIT_BY_ID, {
+  const { loading, data } = useQuery(GET_CASH_DEPOSIT_BY_ID, {
     variables: { id: cashDepositId },
   });
 
@@ -64,7 +64,6 @@ function CashDepositForm({ cashDepositId }) {
 
   const {
     loading: locationsLoading,
-    error: locationsError,
     data: locationsData,
   } = useQuery(GET_LOCATIONS);
 
@@ -84,7 +83,6 @@ function CashDepositForm({ cashDepositId }) {
 
   const {
     loading: usersLoading,
-    error: usersError,
     data: usersData,
   } = useQuery(GET_USERS);
 
@@ -144,18 +142,6 @@ function CashDepositForm({ cashDepositId }) {
       });
     }
   }, [loading, data, cashDepositId]);
-
-  const formatDate = (date) => {
-    const pad = (num) => String(num).padStart(2, "0");
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-      date.getDate()
-    )}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(
-      date.getSeconds()
-    )}Z`;
-  };
-
-  const now = new Date();
-  const currentTimestamp = formatDate(now);
 
   const initialVariables = {
     deposit_type: formData.deposit_type,
