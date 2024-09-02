@@ -42,5 +42,16 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://manage.lvh.me:5000"
+  "proxy": "http://manage.lvh.me:5000",
+  "devDependencies": {
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-react": "^7.24.7",
+    "babel-jest": "^29.7.0",
+    "jest": "^27.5.1"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/node/axios.cjs"
+    }
+  }
 }
