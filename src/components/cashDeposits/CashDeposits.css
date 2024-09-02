@@ -51,11 +51,12 @@ table {
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 8px;
+  box-shadow: none;
   transition: border-color 0.15s ease-in-out;
+  overflow: hidden;
 }
-
 .search-input-container:focus-within {
-  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5) !important;
 }
 
 .left-icon {
@@ -78,7 +79,7 @@ table {
 }
 
 .search-input-container .form-control {
-  border: none;
+  border: none !important;
   padding-left: 60px;
 }
 
@@ -111,6 +112,11 @@ table tbody td {
   height: auto;
 }
 
+.basic-multi-select .select__control--is-focused {
+  border-color: #cfcfcf !important;
+  box-shadow: none;
+}
+
 .basic-multi-select .select__value-container {
   min-height: 38px;
   padding: 0 8px;
@@ -119,6 +125,14 @@ table tbody td {
 
 .basic-multi-select .select__indicators {
   height: 38px;
+}
+
+.basic-multi-select .select__menu {
+  margin: 0;
+}
+
+.basic-multi-select .select__menu-list {
+  padding: 0;
 }
 
 #react-select-2-input,
