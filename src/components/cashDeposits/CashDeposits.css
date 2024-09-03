@@ -133,7 +133,14 @@ table tbody td {
 
 .basic-multi-select .select__menu-list {
   padding: 0;
+  max-height: 200px;
+  overflow-y: auto; 
 }
+.basic-multi-select .select__option {
+  padding: 4px 8px; 
+  height: 30px;
+}
+
 
 #react-select-2-input,
 #react-select-3-input,

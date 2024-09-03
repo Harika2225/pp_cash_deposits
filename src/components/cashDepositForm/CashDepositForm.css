@@ -11,7 +11,10 @@ h1{
 }
 .form-group {
   margin-bottom: 12px;
+  flex: 1 1 0; 
+  padding-right: 15px;
 }
+
 .form-check{
   padding-left:0 !important;
   padding-bottom: 7px;
@@ -25,10 +28,8 @@ label {
 
 .col-md-4, .col-md-6 {
   padding-right: 15px;
+  flex: 1 1 auto;
 } 
-.market-group, .location-group, .date {
-  margin-right: 10px; 
-}
 
 .form-control{
   height: auto;
@@ -62,21 +63,56 @@ textarea:focus
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5) !important; 
 }
 
-select{
-  background-color: #f9f9f9 !important;
-}
 
 .flexRow{
   display: flex;
-  width: 100%;
+  flex-wrap: wrap;
+  width: 100% !important;
+}
+
+@media screen and (max-width: 994px) and (max-height: 961px) {
+  .flexRow, .flex {
+    flex-direction: column;
+  }
+
+  .flexRow .form-group {
+    width: 100%;
+  }
+
+  .col-md-4, .col-md-6, .col-md-5 {
+    padding: 0;
+    margin: 0;
+    width: 100% !important;
+    padding-bottom: 8px;
+  }
+  
+  .row {
+    width: 100% !important; 
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group {
+    margin-bottom: 12px;
+    flex: 1 1 0; 
+    padding-right: 15px;
+  }
 }
 
 .flex {
   display: flex !important;
+  width:100%;
+  /* flex-direction: row; */
+}
+.flexCheckBox {
+  display: flex !important;
+  width:100%;
   flex-direction: row;
 }
 .form-group1{
-  padding-right: 15px;;
+  padding-right: 15px;
 }
 
 input[type="checkbox"] {
@@ -144,3 +180,76 @@ input[type="checkbox"] {
   font-size: 24px;
   color: #666
 }
+
+.file-input{
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+.basic-select .select__control{
+  align-content: center;
+  background-color: #f9f9f9;
+  height: 34px;
+
+}
+.basic-select .select__control--is-focused {
+  border-color: #cfcfcf !important;
+  box-shadow: none;
+}
+.basic-select .select__value-container {
+  padding-right: 30px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.basic-select .select__clear-indicator {
+  position: absolute;
+  right: 10px;
+  transform: translateX(-100%);
+  padding-right: 5px; 
+  cursor: pointer;
+}
+.basic-select .select__clear-indicator:hover{
+  color:#337ab7;
+  text-decoration: underline !important;
+}
+
+.basic-select .select__dropdown-indicator {
+  display: none; 
+}
+
+.select-container .right-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; 
+}
+.basic-select .select__indicators {
+  height: 38px;
+}
+
+.basic-select .select__menu {
+  margin: 0;
+}
+
+.basic-select .select__menu-list {
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden; 
+}
+
+.basic-select .select__option {
+  padding: 4px 8px;
+  height: auto; 
+  white-space: normal; 
+  overflow-wrap: break-word; 
+  word-break: break-word; 
+}
+
+.basic-select .select__menu {
+  width: 100%; 
+}
+

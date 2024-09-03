@@ -258,6 +258,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
                 className="basic-multi-select"
                 classNamePrefix="select"
                 placeholder="All Markets"
+                isSearchable={false}
                 components={{
                   DropdownIndicator: null,
                   IndicatorSeparator: null,
@@ -271,6 +272,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
                 options={locationOptions}
                 value={selectedLocationOptions}
                 onChange={handleLocationChange}
+                isSearchable={false}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 placeholder="All Locations"
@@ -289,6 +291,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
                   filters.depositType.includes(option.value)
                 )}
                 onChange={handleDepositTypeChange}
+                isSearchable={false}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 placeholder="All Deposit Types"
