@@ -715,14 +715,12 @@ function CashDepositForm({ cashDepositId }) {
           </div>
         </div>
       </div>
-      <div className="buttons">
       <button type="submit" className="btn btn-primary">
         Save
       </button>
       <Link to={"/react_cash_deposits"} className="btn btn-secondary">
         Cancel
       </Link>
-      </div>
     </form>
   );
 }

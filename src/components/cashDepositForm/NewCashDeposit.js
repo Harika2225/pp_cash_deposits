@@ -5,7 +5,6 @@ const NewCashDeposit = () => {
   return (
     <div className="container">
     <div className="page-header p-2">
-      <br/><br/><br/>
       <h1>New Cash Deposit</h1>
       <hr style={{ color: "#cfcfcf" }} />
       <div className="col-md-12">
