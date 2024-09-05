@@ -398,7 +398,7 @@ function CashDepositForm({ cashDepositId }) {
   return (
     <form onSubmit={handleSubmit} className="cash-deposit-form container">
       <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-6 depositDetails">
           <div className="form-group col-md-6 dropdown">
             <label>Deposit Type</label>
             <div className="select-container">
@@ -532,7 +532,7 @@ function CashDepositForm({ cashDepositId }) {
                     className="basic-select"
                     classNamePrefix="select"
                     isSearchable={false}
-                    placeholder={false}
+                    placeholder={"N/A"}
                     components={{
                       DropdownIndicator: null,
                       IndicatorSeparator: null,
@@ -715,12 +715,14 @@ function CashDepositForm({ cashDepositId }) {
           </div>
         </div>
       </div>
+      <div className="buttons">
       <button type="submit" className="btn btn-primary">
         Save
       </button>
       <Link to={"/react_cash_deposits"} className="btn btn-secondary">
         Cancel
       </Link>
+      </div>
     </form>
   );
 }

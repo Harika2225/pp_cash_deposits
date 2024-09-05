@@ -5,6 +5,7 @@ import CashDeposit from "./components/cashDeposits/CashDeposits";
 import NewCashDeposit from "./components/cashDepositForm/NewCashDeposit";
 import EditCashDeposit from "./components/cashDepositForm/EditCashDeposit";
 import { NavBar } from "premiumparking-navbar";
+import GlobalStyle from "./assets/stylesheets/globalStyles";
 
 function App() {
   const navigationMenuOptions = [
@@ -113,8 +114,9 @@ function App() {
   return (
     <Router>
       <div>
-        {/* Add the NavBar component here */}
+        <GlobalStyle/>
         <NavBar
+        className="navbar"
           navigationMenuOptions={navigationMenuOptions}
           userSignedIn={true}
           manageRootPath="/"

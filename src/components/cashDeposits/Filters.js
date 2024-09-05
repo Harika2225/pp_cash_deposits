@@ -124,7 +124,9 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
     console.log("Generated URL:", url);
 
     try {
-      const response = await axios.get(`${process.env.REACT_APP_RAILS_BACKEND}${url}`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_RAILS_BACKEND}${url}`
+      );
       console.log("Response data:", response.data);
       setisFilteredData(response.data);
       console.log("Filter data set:", response.data);
@@ -198,12 +200,12 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
 
   return (
     <form onSubmit={handleFindClick}>
-      <br />
-      <a href={process.env.REACT_APP_RAILS_BACKEND}>Back</a>
-      <div className="container-fluid cash-deposits-container">
+      {/* <br /> */}
+      {/* <a href={process.env.REACT_APP_RAILS_BACKEND}>Back</a> */}
+      <div className="flash-message-container">sdf</div>
+
+      <div className="container-fluid cash-deposits-container ">
         <div className="page-header form-column-filters">
-          <br />
-          <br />
           <div className="row mb-4 filtersWidth">
             <div className="col-md-6">
               <h1>Cash Deposits</h1>
@@ -302,7 +304,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
               />
             </div>
           </div>
-          <div className="row mb-3">
+          <div className="row mb-3 row">
             <div className="col-md-6">
               <div className="date-wrapper">
                 <input
@@ -333,7 +335,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
             </div>
           </div>
 
-          <div className="row mb-3">
+          <div className="row mb-3 row">
             <div className="col-md-6">
               <div className="date-wrapper">
                 <input
