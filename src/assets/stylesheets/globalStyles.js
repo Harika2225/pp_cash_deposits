@@ -27,11 +27,39 @@ const GlobalStyle = createGlobalStyle`
       top: 0;
       left: 0;
       right: 0;
-      height: 60px; 
+      height: 50px; 
       background-color: #fff;
       z-index: 1030; 
-      margin-bottom:20px;
-  }
+    }
+
+    .dropdown-menu {
+      max-height: 500px;
+      font-size: 14px;
+      overflow-y: auto;
+      border-top-color: transparent;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+      padding: 5px 0px;
+      position: absolute;
+    }
+    .dropdown-menu.show{
+      margin-top: 5px !important
+    }
+    .dropdown-menu .dropdown-item {
+      font-size: 14px;
+      padding: 2px 20px;
+    }
+
+    .dropdown-menu::-webkit-scrollbar {
+      width: 8px; 
+    }
+    .dropdown-menu::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.04); 
+    }
+    .dropdown-menu::-webkit-scrollbar-track {
+      background-color: #fff;
+    }
+
     & > div {
       display: flex; /* This is a hack for sticky footer on IE */
       flex-direction: column;
