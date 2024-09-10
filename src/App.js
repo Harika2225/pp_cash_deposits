@@ -4,7 +4,7 @@ import "./App.css";
 import CashDeposit from "./components/cashDeposits/CashDeposits";
 import NewCashDeposit from "./components/cashDepositForm/NewCashDeposit";
 import EditCashDeposit from "./components/cashDepositForm/EditCashDeposit";
-import { NavBar } from "premiumparking-navbar";
+import { NavBar } from "pp-navbar";
 import GlobalStyle from "./assets/stylesheets/globalStyles";
 import { navigationMenuOptions } from "./navBarMenuOptions";
 
