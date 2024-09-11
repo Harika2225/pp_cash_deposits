@@ -16,11 +16,16 @@ const GlobalStyle = createGlobalStyle`
     font-size: 14px;
 
     span{
-      font-size:13px
+      font-size:13px;
     }
     h1{
       font-size: 36px;
       margin: 20px 0px 0px; 
+      color: #333
+    }
+    h2{
+      font-size: 30px;
+      color: #333;
     }
     .navbar {
       position: fixed;
@@ -31,7 +36,7 @@ const GlobalStyle = createGlobalStyle`
       background-color: #fff;
       z-index: 1030; 
     }
-
+    
     .dropdown-menu {
       max-height: 500px;
       font-size: 14px;
@@ -70,6 +75,9 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  label{
+    color: #333
+  }
   select,
   input,
   textarea,

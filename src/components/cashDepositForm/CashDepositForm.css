@@ -15,8 +15,7 @@ h1 {
 .form-group {
   margin-bottom: 7px;
   flex: 1 1 0;
-  padding-right: 15px;
-  color: #555;
+  padding-right: 30px;
   border-color: 1px solid #ccc;
 }
 
@@ -33,7 +32,7 @@ label {
 
 .col-md-4,
 .col-md-6 {
-  padding-right: 15px;
+  padding-right: 30px;
   flex: 1 1 auto;
 }
 
