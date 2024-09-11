@@ -234,8 +234,8 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
 
         <div className="filtersWidth">
           <div className="mb-3">
-            <div className="search-input-container">
-              <span className="left-icon">
+            <div class="input-group mb-3">
+              <span class="input-group-text search-icon">
                 <MdOutlineSearch />
               </span>
               <input
@@ -309,7 +309,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
               <div className="date-wrapper">
                 <input
                   type="text"
-                  className="form-control date-input"
+                  className="form-control"
                   name="createdFrom"
                   value={filters.createdFrom}
                   onChange={handleFilterChange}
@@ -323,7 +323,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
               <div className="date-wrapper">
                 <input
                   type="text"
-                  className="form-control date-input"
+                  className="form-control"
                   name="createdUntil"
                   value={filters.createdUntil}
                   onChange={handleFilterChange}
@@ -340,7 +340,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
               <div className="date-wrapper">
                 <input
                   type="text"
-                  className="form-control date-input"
+                  className="form-control"
                   name="depositDateFrom"
                   value={filters.depositDateFrom}
                   onChange={handleFilterChange}
@@ -354,7 +354,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
               <div className="date-wrapper">
                 <input
                   type="text"
-                  className="form-control date-input"
+                  className="form-control"
                   name="depositDateUntil"
                   value={filters.depositDateUntil}
                   onChange={handleFilterChange}

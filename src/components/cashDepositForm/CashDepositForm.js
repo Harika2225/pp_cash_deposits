@@ -566,7 +566,6 @@ function CashDepositForm({ cashDepositId }) {
                 options={userOptions}
                 className="basic-select"
                 classNamePrefix="select"
-                isClearable
                 isSearchable={false}
                 placeholder={false}
                 required
@@ -591,7 +590,6 @@ function CashDepositForm({ cashDepositId }) {
                 options={userOptions}
                 className="basic-select"
                 classNamePrefix="select"
-                isClearable
                 isSearchable={false}
                 placeholder={false}
                 required
