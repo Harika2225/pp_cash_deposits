@@ -1,19 +1,21 @@
-import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import CashDepositTable from './CashDepositTable';
-import { MockedProvider } from '@apollo/client/testing';
+import React, { useState } from "react";
+import "./CashDeposits.css";
+import Filters from "./Filters";
+import CashDepositTable from "./CashDepositTable";
 
-test('displays filtered deposits correctly', () => {
-  const mocks = []; // Define your mocks here
-  const isFilteredData = true; // Example data
-
-  const { getByText } = render(
-    <MemoryRouter>
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <CashDepositTable isFilteredData={isFilteredData} isFind={true} />
-      </MockedProvider>
-    </MemoryRouter>
+function CashDeposits() {
+  const [isFilteredData, setisFilteredData] = useState([]);
+  const [isFind, setIsFind] = useState(false);
+  return (
+    <div className="container-fluid cash-deposits-container">
+      <Filters
+        isFilteredData={isFilteredData}
+        setisFilteredData={setisFilteredData}
+        setIsFind={setIsFind}
+      />
+      <CashDepositTable isFilteredData={isFilteredData} isFind={isFind} />
+    </div>
   );
-  
-  // Add your assertions here
-});
+}
+
+export default CashDeposits;
