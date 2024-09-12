@@ -14,13 +14,16 @@ const EditCashDeposit = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="page-header p-4">
-      <h2>Edit Cash Deposit</h2>
-      <hr style={{ color: "#cfcfcf" }} />
-      <CashDepositForm
-        cashDepositId={parseInt(id)}
-        initialData={data.cash_deposit_by_pk}
-      />
+    <div className="container">
+      <div className="flash-message-container">flash message</div>
+      <div className="page-header p-2">
+        <h1>Edit Cash Deposit</h1>
+        <hr style={{ color: "#cfcfcf" }} />
+        <CashDepositForm
+          cashDepositId={parseInt(id)}
+          initialData={data.cash_deposit_by_pk}
+        />
+      </div>
     </div>
   );
 };

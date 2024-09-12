@@ -124,7 +124,9 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
     console.log("Generated URL:", url);
 
     try {
-      const response = await axios.get(`${process.env.REACT_APP_RAILS_BACKEND}${url}`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_RAILS_BACKEND}${url}`
+      );
       console.log("Response data:", response.data);
       setisFilteredData(response.data);
       console.log("Filter data set:", response.data);
@@ -198,13 +200,13 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
 
   return (
     <form onSubmit={handleFindClick}>
-      <br />
-      <a href={process.env.REACT_APP_RAILS_BACKEND}>Back</a>
-      <div className="container-fluid cash-deposits-container">
+      {/* <br /> */}
+      {/* <a href={process.env.REACT_APP_RAILS_BACKEND}>Back</a> */}
+      <div className="flash-message-container">flash message</div>
+
+      <div className="container-fluid cash-deposits-container ">
         <div className="page-header form-column-filters">
-          <br />
-          <br />
-          <div className="row mb-4 filtersWidth">
+          <div className="row filtersWidth">
             <div className="col-md-6">
               <h1>Cash Deposits</h1>
             </div>
@@ -232,8 +234,8 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
 
         <div className="filtersWidth">
           <div className="mb-3">
-            <div className="search-input-container">
-              <span className="left-icon">
+            <div class="input-group mb-3">
+              <span class="input-group-text search-icon">
                 <MdOutlineSearch />
               </span>
               <input
@@ -258,6 +260,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
                 className="basic-multi-select"
                 classNamePrefix="select"
                 placeholder="All Markets"
+                isSearchable={false}
                 components={{
                   DropdownIndicator: null,
                   IndicatorSeparator: null,
@@ -271,6 +274,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
                 options={locationOptions}
                 value={selectedLocationOptions}
                 onChange={handleLocationChange}
+                isSearchable={false}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 placeholder="All Locations"
@@ -289,6 +293,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
                   filters.depositType.includes(option.value)
                 )}
                 onChange={handleDepositTypeChange}
+                isSearchable={false}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 placeholder="All Deposit Types"
@@ -299,12 +304,12 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
               />
             </div>
           </div>
-          <div className="row mb-3">
+          <div className="row mb-3 row">
             <div className="col-md-6">
               <div className="date-wrapper">
                 <input
                   type="text"
-                  className="form-control date-input"
+                  className="form-control"
                   name="createdFrom"
                   value={filters.createdFrom}
                   onChange={handleFilterChange}
@@ -318,7 +323,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
               <div className="date-wrapper">
                 <input
                   type="text"
-                  className="form-control date-input"
+                  className="form-control"
                   name="createdUntil"
                   value={filters.createdUntil}
                   onChange={handleFilterChange}
@@ -330,12 +335,12 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
             </div>
           </div>
 
-          <div className="row mb-3">
+          <div className="row mb-3 row">
             <div className="col-md-6">
               <div className="date-wrapper">
                 <input
                   type="text"
-                  className="form-control date-input"
+                  className="form-control"
                   name="depositDateFrom"
                   value={filters.depositDateFrom}
                   onChange={handleFilterChange}
@@ -349,7 +354,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
               <div className="date-wrapper">
                 <input
                   type="text"
-                  className="form-control date-input"
+                  className="form-control"
                   name="depositDateUntil"
                   value={filters.depositDateUntil}
                   onChange={handleFilterChange}
