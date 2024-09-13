@@ -234,8 +234,8 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
 
         <div className="filtersWidth">
           <div className="mb-3">
-            <div class="input-group mb-3">
-              <span class="input-group-text search-icon">
+            <div className="input-group mb-3">
+              <span className="input-group-text search-icon">
                 <MdOutlineSearch />
               </span>
               <input

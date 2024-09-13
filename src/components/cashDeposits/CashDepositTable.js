@@ -9,7 +9,7 @@ export default function CashDepositTable({ isFilteredData, isFind }) {
     useQuery(GET_CASH_DEPOSITS);
 
   useEffect(() => {
-    console.log("Raw isFilteredData:", isFilteredData);
+    // console.log("Raw isFilteredData:", isFilteredData);
     if (isFind) {
       if (isFilteredData && isFilteredData.length > 0) {
         const formattedData = isFilteredData.map((deposit) => {

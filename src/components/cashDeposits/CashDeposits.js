@@ -6,9 +6,6 @@ import CashDepositTable from "./CashDepositTable";
 function CashDeposits() {
   const [isFilteredData, setisFilteredData] = useState([]);
   const [isFind, setIsFind] = useState(false);
-
-  console.log(isFilteredData, "Filtered Data");
-
   return (
     <div className="container-fluid cash-deposits-container">
       <Filters
