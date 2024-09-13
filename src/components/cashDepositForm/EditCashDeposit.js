@@ -15,7 +15,6 @@ const EditCashDeposit = () => {
 
   return (
     <div className="container">
-      <div className="flash-message-container">flash message</div>
       <div className="page-header p-2">
         <h1>Edit Cash Deposit</h1>
         <hr style={{ color: "#cfcfcf" }} />

@@ -10,7 +10,6 @@ describe('NewCashDeposit Component', () => {
     render(<NewCashDeposit />);
 
     expect(screen.getByText('New Cash Deposit')).toBeInTheDocument();
-    // expect(screen.getByText('flash message')).toBeInTheDocument();
     expect(screen.getByText('Mocked CashDepositForm')).toBeInTheDocument();
 
     const hrElement = screen.getByRole('separator');

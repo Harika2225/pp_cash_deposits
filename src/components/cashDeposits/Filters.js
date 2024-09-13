@@ -200,10 +200,6 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
 
   return (
     <form onSubmit={handleFindClick}>
-      {/* <br /> */}
-      {/* <a href={process.env.REACT_APP_RAILS_BACKEND}>Back</a> */}
-      <div className="flash-message-container">flash message</div>
-
       <div className="container-fluid cash-deposits-container ">
         <div className="page-header form-column-filters">
           <div className="row filtersWidth">

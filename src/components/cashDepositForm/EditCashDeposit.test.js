@@ -56,7 +56,6 @@ describe("EditCashDeposit Component", () => {
     await waitFor(() => {
       expect(screen.getByText("Edit Cash Deposit")).toBeInTheDocument();
       expect(screen.getByText("Mocked CashDepositForm")).toBeInTheDocument();
-      //   expect(screen.getByText('flash message')).toBeInTheDocument();
       const hrElement = screen.getByRole("separator");
       expect(hrElement).toHaveStyle("color: #cfcfcf");
     });
