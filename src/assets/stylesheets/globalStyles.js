@@ -64,6 +64,9 @@ const GlobalStyle = createGlobalStyle`
     .dropdown-menu::-webkit-scrollbar-track {
       background-color: #fff;
     }
+    img{
+      margin-left: 10px;
+    }
 
     & > div {
       display: flex; /* This is a hack for sticky footer on IE */
