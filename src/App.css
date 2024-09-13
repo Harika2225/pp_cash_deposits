@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+* {
+  font-family: "Gotham A", "Gotham B", "Gotham HTF", "Gotham", Helvetica, sans-serif !important;
+}

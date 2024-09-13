@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import "./CashDepositForm.css";
 import { useParams } from "react-router-dom";
-import { GET_CASH_DEPOSIT_BY_ID } from "../queries/cash_deposits_query";
+import { GET_CASH_DEPOSIT_BY_ID } from "../../graphql/queries/cash_deposits_query";
 import CashDepositForm from "./CashDepositForm";
 
 const EditCashDeposit = () => {

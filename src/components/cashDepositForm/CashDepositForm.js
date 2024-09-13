@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import {
-  INSERT_CASH_DEPOSIT,
-  UPDATE_CASH_DEPOSIT,
-} from "../mutations/cash_deposits_mutations";
+import { useQuery } from "@apollo/client";
 import "./CashDepositForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import { GET_CASH_DEPOSIT_BY_ID } from "../queries/cash_deposits_query";
-import { GET_MARKETS } from "../queries/markets_query";
-import { GET_LOCATIONS } from "../queries/locations_query";
-import { GET_USERS } from "../queries/users_query";
+import { GET_CASH_DEPOSIT_BY_ID } from "../../graphql/queries/cash_deposits_query";
+import { GET_MARKETS } from "../../graphql/queries/markets_query";
+import { GET_LOCATIONS } from "../../graphql/queries/locations_query";
+import { GET_USERS } from "../../graphql/queries/users_query";
 import { MdArrowDropDown } from "react-icons/md";
 import axios from "axios";
 
 function CashDepositForm({ cashDepositId }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     deposit_type: "pay_machine",
     bag_number: "",
@@ -180,13 +177,7 @@ function CashDepositForm({ cashDepositId }) {
     deposit_amount_cents: formData.deposit_amount_cents,
     bank_deposit_amount_cents: formData.bank_deposit_amount_cents,
     bank_receipt_id: formData?.bank_receipt_id,
-    // files: formData.files.map((file) => file.name),
-    // files: formData.files.length > 0 ? formData.files[0] : null,
   };
-
-  const navigate = useNavigate();
-  const [insertCashDeposit] = useMutation(INSERT_CASH_DEPOSIT);
-  const [updateCashDeposit] = useMutation(UPDATE_CASH_DEPOSIT);
 
   const generateOptions = () => {
     const options = [];
@@ -196,30 +187,6 @@ function CashDepositForm({ cashDepositId }) {
     }
     return options;
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const { data } = cashDepositId
-  //       ? await updateCashDeposit({
-  //           variables: { id: cashDepositId, ...initialVariables },
-  //           refetchQueries: [{ query: GET_CASH_DEPOSITS }],
-  //         })
-  //       : await insertCashDeposit({
-  //           variables: {
-  //             ...initialVariables,
-  //           },
-  //           refetchQueries: [{ query: GET_CASH_DEPOSITS }],
-  //         });
-  //     console.log(
-  //       `Cash deposit ${cashDepositId ? "updated" : "created"} successfully!`,
-  //       data
-  //     );
-  //     navigate("/react_cash_deposits");
-  //   } catch (error) {
-  //     console.error("There was an error submitting the data!", error);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
