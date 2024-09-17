@@ -335,65 +335,57 @@ const Filters = ({
               />
             </div>
           </div>
-          <div className="row mb-3 row">
+          <div className="row mb-3">
             <div className="col-md-6">
-              <div className="date-wrapper">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="createdFrom"
-                  value={filters.createdFrom}
-                  onChange={handleFilterChange}
-                  placeholder="Created From - Central Time (US & Canada)"
-                  onFocus={(e) => (e.target.type = "datetime-local")}
-                  onBlur={(e) => (e.target.type = "text")}
-                />
-              </div>
+              <input
+                type="text"
+                className="form-control"
+                name="createdFrom"
+                value={filters.createdFrom}
+                onChange={handleFilterChange}
+                placeholder="Created From - Central Time (US & Canada)"
+                onFocus={(e) => (e.target.type = "datetime-local")}
+                onBlur={(e) => (e.target.type = "text")}
+              />
             </div>
             <div className="col-md-6">
-              <div className="date-wrapper">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="createdUntil"
-                  value={filters.createdUntil}
-                  onChange={handleFilterChange}
-                  placeholder="Created Until - Central Time (US & Canada)"
-                  onFocus={(e) => (e.target.type = "datetime-local")}
-                  onBlur={(e) => (e.target.type = "text")}
-                />
-              </div>
+              <input
+                type="text"
+                className="form-control"
+                name="createdUntil"
+                value={filters.createdUntil}
+                onChange={handleFilterChange}
+                placeholder="Created Until - Central Time (US & Canada)"
+                onFocus={(e) => (e.target.type = "datetime-local")}
+                onBlur={(e) => (e.target.type = "text")}
+              />
             </div>
           </div>
 
           <div className="row mb-3 row">
             <div className="col-md-6">
-              <div className="date-wrapper">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="depositDateFrom"
-                  value={filters.depositDateFrom}
-                  onChange={handleFilterChange}
-                  placeholder="Deposit Date From - Central Time (US & Canada)"
-                  onFocus={(e) => (e.target.type = "datetime-local")}
-                  onBlur={(e) => (e.target.type = "text")}
-                />
-              </div>
+              <input
+                type="text"
+                className="form-control"
+                name="depositDateFrom"
+                value={filters.depositDateFrom}
+                onChange={handleFilterChange}
+                placeholder="Deposit Date From - Central Time (US & Canada)"
+                onFocus={(e) => (e.target.type = "datetime-local")}
+                onBlur={(e) => (e.target.type = "text")}
+              />
             </div>
             <div className="col-md-6">
-              <div className="date-wrapper">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="depositDateUntil"
-                  value={filters.depositDateUntil}
-                  onChange={handleFilterChange}
-                  placeholder="Deposit Date Until - Central Time (US & Canada)"
-                  onFocus={(e) => (e.target.type = "datetime-local")}
-                  onBlur={(e) => (e.target.type = "text")}
-                />
-              </div>
+              <input
+                type="text"
+                className="form-control"
+                name="depositDateUntil"
+                value={filters.depositDateUntil}
+                onChange={handleFilterChange}
+                placeholder="Deposit Date Until - Central Time (US & Canada)"
+                onFocus={(e) => (e.target.type = "datetime-local")}
+                onBlur={(e) => (e.target.type = "text")}
+              />
             </div>
           </div>
 
