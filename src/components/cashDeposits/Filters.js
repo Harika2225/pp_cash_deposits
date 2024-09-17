@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_USER_MARKETS } from "../../graphql/queries/markets_query";
 import { GET_LOCATIONS } from "../../graphql/queries/locations_query";
+import { GET_MARKET_LOCATIONS } from "../../graphql/queries/locations_query";
 import { GET_USER_ACCESSIBLE_ENTITIES } from "../../graphql/queries/user_accessible_entities_query";
 import { GET_MARKETS } from "../../graphql/queries/markets_query";
 import "./CashDeposits.css";
@@ -44,7 +45,13 @@ const Filters = ({
     skip: marketIds && marketIds.length > 0,
   });
 
-  const { data: locationsData } = useQuery(GET_LOCATIONS);
+  const { data: locationsData } = useQuery(
+    marketIds && marketIds.length > 0 ? GET_MARKET_LOCATIONS : GET_LOCATIONS,
+    {
+      variables: { marketIds: marketIds || [] },
+      skip: marketIds && marketIds.length > 0 ? !marketIds.length : false,
+    }
+  );
 
   useEffect(() => {
     console.log("Current User ID in Filters:", currentUserId);
@@ -182,6 +189,7 @@ const Filters = ({
       locationId: [],
     }));
   };
+
   const handleLocationChange = (selectedOptions) => {
     const selectedLocationIds = selectedOptions
       ? selectedOptions.map((option) => option.value)
@@ -191,6 +199,7 @@ const Filters = ({
       locationId: selectedLocationIds,
     }));
   };
+
   const handleDepositTypeChange = (selectedOptions) => {
     const selectedDepositTypes = selectedOptions
       ? selectedOptions.map((option) => option.value)
@@ -211,7 +220,7 @@ const Filters = ({
 
   const locationOptions = sortedLocations.map((location) => ({
     value: location.id,
-    label: location.name,
+    label: location.deleted_at ? `${location.name} (Archived)` : location.name,
   }));
 
   const selectedLocationOptions = locationOptions.filter((option) =>
@@ -226,7 +235,7 @@ const Filters = ({
 
   return (
     <form onSubmit={handleFindClick}>
-      <div className="container-fluid cash-deposits-container ">
+      <div className="container-fluid cash-deposits-container">
         <div className="page-header form-column-filters">
           <div className="row filtersWidth">
             <div className="col-md-6">
