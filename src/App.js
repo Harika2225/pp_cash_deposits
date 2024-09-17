@@ -6,6 +6,7 @@ import NewCashDeposit from "./components/cashDepositForm/NewCashDeposit";
 import EditCashDeposit from "./components/cashDepositForm/EditCashDeposit";
 import { NavBar } from "pp-navbar";
 import GlobalStyle from "./assets/stylesheets/globalStyles";
+import NavBarStyle from "./assets/stylesheets/NavBarStyle";
 import { navigationMenuOptions } from "./navBarMenuOptions";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <Router>
       <div>
         <GlobalStyle />
+        <NavBarStyle />
         <NavBar
           className="navbar"
           navigationMenuOptions={navigationMenuOptions}
