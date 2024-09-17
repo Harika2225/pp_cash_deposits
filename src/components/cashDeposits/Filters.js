@@ -154,7 +154,7 @@ const Filters = ({
       params.append("cash_deposit[deposit_types][]", type);
     });
 
-    const url = `/cash_deposits/filter?${params.toString()}`;
+    const url = `/cash_deposits1/filter?${params.toString()}`;
     console.log("Generated URL:", url);
 
     try {
