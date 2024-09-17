@@ -3,13 +3,17 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_CASH_DEPOSITS } from "../../graphql/queries/cash_deposits_query";
 
-export default function CashDepositTable({ isFilteredData, isFind }) {
+export default function CashDepositTable({
+  isFilteredData,
+  isFind,
+  currentUserId,
+}) {
   const [deposits, setDeposits] = useState([]);
   const { data: depositsData, refetch: refetchDeposits } =
     useQuery(GET_CASH_DEPOSITS);
 
   useEffect(() => {
-    // console.log("Raw isFilteredData:", isFilteredData);
+    console.log("CashDepositTable Current User ID:", currentUserId);
     if (isFind) {
       if (isFilteredData && isFilteredData.length > 0) {
         const formattedData = isFilteredData.map((deposit) => {
@@ -94,7 +98,7 @@ export default function CashDepositTable({ isFilteredData, isFind }) {
       mappedDeposits.sort((a, b) => b.id - a.id);
       setDeposits(mappedDeposits);
     }
-  }, [depositsData, isFilteredData, isFind]);
+  }, [depositsData, isFilteredData, isFind, currentUserId]);
 
   useEffect(() => {
     refetchDeposits();

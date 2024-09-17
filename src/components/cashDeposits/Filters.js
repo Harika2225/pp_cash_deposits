@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_MARKETS } from "../../graphql/queries/markets_query";
+import { GET_USER_MARKETS } from "../../graphql/queries/markets_query";
 import { GET_LOCATIONS } from "../../graphql/queries/locations_query";
+import { GET_USER_ACCESSIBLE_ENTITIES } from "../../graphql/queries/user_accessible_entities_query";
+import { GET_MARKETS } from "../../graphql/queries/markets_query";
 import "./CashDeposits.css";
 import { MdOutlineSearch } from "react-icons/md";
 import axios from "axios";
 import Select from "react-select";
 
-const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
+const Filters = ({
+  isFilteredData,
+  setisFilteredData,
+  setIsFind,
+  currentUserId,
+}) => {
   const [filters, setFilters] = useState({
     search: "",
     marketId: [],
@@ -20,8 +27,28 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
     depositDateUntil: "",
   });
 
-  const { data: marketsData } = useQuery(GET_MARKETS);
+  const { data: userAccessibleData } = useQuery(GET_USER_ACCESSIBLE_ENTITIES, {
+    variables: { user_id: currentUserId },
+  });
+
+  const marketIds = userAccessibleData?.user_accessible_entities
+    .filter((entity) => entity.entity_type === "Market")
+    .map((entity) => entity.entity_id);
+
+  const { data: marketsData } = useQuery(GET_USER_MARKETS, {
+    variables: { marketIds: marketIds || [] },
+    skip: !marketIds || marketIds.length === 0,
+  });
+
+  const { data: allMarketsData } = useQuery(GET_MARKETS, {
+    skip: marketIds && marketIds.length > 0,
+  });
+
   const { data: locationsData } = useQuery(GET_LOCATIONS);
+
+  useEffect(() => {
+    console.log("Current User ID in Filters:", currentUserId);
+  }, [currentUserId]);
 
   const permissions = {
     canEdit: true,
@@ -64,7 +91,7 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
 
     const url = `${
       process.env.REACT_APP_RAILS_BACKEND
-    }/reports?${params.toString()}`;
+    }/reports1?${params.toString()}`;
     console.log("Generated URL:", url);
 
     try {
@@ -135,11 +162,10 @@ const Filters = ({ isFilteredData, setisFilteredData, setIsFind }) => {
     }
   };
 
-  const sortedMarkets = marketsData?.markets
-    ? marketsData.markets
-        .filter((market) => market.name.trim() !== "")
-        .sort((a, b) => a.name.localeCompare(b.name))
-    : [];
+  const sortedMarkets = (marketsData?.markets || allMarketsData?.markets || [])
+    .filter((market) => market.name.trim() !== "")
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   const sortedLocations = locationsData?.locations
     ? locationsData.locations
         .filter((location) => location.name.trim() !== "")

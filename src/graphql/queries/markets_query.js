@@ -9,3 +9,13 @@ export const GET_MARKETS = gql`
     }
   }
 `;
+
+export const GET_USER_MARKETS = gql`
+  query GetMarkets($marketIds: [Int!]) {
+    markets(where: { id: { _in: $marketIds } }) {
+      name
+      id
+      visible
+    }
+  }
+`;
