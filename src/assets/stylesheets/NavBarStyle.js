@@ -3,15 +3,20 @@ import fontFace from "./fontFace";
 const NavBarStyle = createGlobalStyle`
   ${fontFace}
 
+*{
+  font-size:14px;
+}
+
 span {
   font-size: 13px;
+  padding-left: 10px;
 }
 img {
   margin-left: 10px;
 }
 
 .navbar-brand{
-  padding-right: 16px !important;
+  padding-right: 10px !important;
   margin: 0px !important;
 }
 .navbar-collapse.in {
@@ -53,7 +58,36 @@ li > a {
   background-color: #fff;
 }
 
+@media screen and (max-width: 1270px) and (max-height: 961px) {
+  .navbar{
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 1200px) {
+  .navbar-brand{
+    display: flex;
+    flex-direction: row;
+  }
+  span {
+    max-width: 80px !important;
+    margin-top: 3px !important;
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    overflow-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+}
 @media screen and (max-width: 990px) and (max-height: 961px) {
+.navbar{
+    display:flex;
+    flex-direction: row;
+    align-items: flex-start;
+    font-size:12px !important;
+  }
   .navbar-collapse {
     padding-right: 15px;
     padding-left: 15px;
