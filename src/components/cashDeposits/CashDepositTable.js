@@ -2,18 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_CASH_DEPOSITS } from "../../graphql/queries/cash_deposits_query";
+import { GET_USER_CASH_DEPOSITS } from "../../graphql/queries/cash_deposits_query";
 
 export default function CashDepositTable({
   isFilteredData,
   isFind,
   currentUserId,
+  marketIds,
 }) {
   const [deposits, setDeposits] = useState([]);
-  const { data: depositsData, refetch: refetchDeposits } =
-    useQuery(GET_CASH_DEPOSITS);
+
+  const query =
+    marketIds.length > 0 ? GET_USER_CASH_DEPOSITS : GET_CASH_DEPOSITS;
+
+  const { data: depositsData, refetch: refetchDeposits } = useQuery(query, {
+    variables: marketIds.length > 0 ? { marketIds } : {},
+    skip: marketIds.length === 0 && query === GET_USER_CASH_DEPOSITS,
+  });
 
   useEffect(() => {
-    console.log("CashDepositTable Current User ID:", currentUserId);
+    console.log("isFilteredData:", isFilteredData);
     if (isFind) {
       if (isFilteredData && isFilteredData.length > 0) {
         const formattedData = isFilteredData.map((deposit) => {
@@ -98,7 +106,7 @@ export default function CashDepositTable({
       mappedDeposits.sort((a, b) => b.id - a.id);
       setDeposits(mappedDeposits);
     }
-  }, [depositsData, isFilteredData, isFind, currentUserId]);
+  }, [depositsData, isFilteredData, isFind, currentUserId, marketIds]);
 
   useEffect(() => {
     refetchDeposits();
