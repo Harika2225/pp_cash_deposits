@@ -6,7 +6,7 @@ import NewCashDeposit from './NewCashDeposit';
 jest.mock('./CashDepositForm', () => () => <div>Mocked CashDepositForm</div>);
 
 describe('NewCashDeposit Component', () => {
-  test('renders NewCashDeposit component', () => {
+  test('renders NewCashDeposit component', async() => {
     render(<NewCashDeposit />);
 
     expect(screen.getByText('New Cash Deposit')).toBeInTheDocument();

@@ -32,7 +32,7 @@ afterEach(() => {
     jest.clearAllTimers(); // Clear any pending timers
   });
 
-test('renders cash deposits text', () => {
+test('renders cash deposits text', async() => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <MemoryRouter>
