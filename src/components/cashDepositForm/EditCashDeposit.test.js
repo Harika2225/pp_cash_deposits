@@ -36,7 +36,7 @@ describe("EditCashDeposit Component", () => {
     useParams.mockReturnValue({ id: "1" });
   });
 
-  test("renders loading state", () => {
+  test("renders loading state", async() => {
     render(
       <MockedProvider mocks={[]} addTypename={false}>
         <EditCashDeposit />
