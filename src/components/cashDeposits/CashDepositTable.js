@@ -13,17 +13,17 @@ export default function CashDepositTable({
   const [deposits, setDeposits] = useState([]);
 
   const query =
-    marketIds.length > 0 ? GET_USER_CASH_DEPOSITS : GET_CASH_DEPOSITS;
+    marketIds?.length > 0 ? GET_USER_CASH_DEPOSITS : GET_CASH_DEPOSITS;
 
   const { data: depositsData, refetch: refetchDeposits } = useQuery(query, {
-    variables: marketIds.length > 0 ? { marketIds } : {},
-    skip: marketIds.length === 0 && query === GET_USER_CASH_DEPOSITS,
+    variables: marketIds?.length > 0 ? { marketIds } : {},
+    skip: marketIds?.length === 0 && query === GET_USER_CASH_DEPOSITS,
   });
 
   useEffect(() => {
     console.log("isFilteredData:", isFilteredData);
     if (isFind) {
-      if (isFilteredData && isFilteredData.length > 0) {
+      if (isFilteredData?.length > 0) {
         const formattedData = isFilteredData.map((deposit) => {
           return {
             id: deposit.id,
@@ -52,8 +52,12 @@ export default function CashDepositTable({
               100,
             shift: deposit.shift,
             bank_receipt_id: deposit.bank_receipt_id,
-            formatted_digital_pull_time_at: deposit.digital_pull_time_at,
-            formatted_digital_pull_2_time_at: deposit.digital_pull_2_time_at,
+            formatted_digital_pull_time_at: formatDate(
+              deposit.digital_pull_time_at
+            ),
+            formatted_digital_pull_2_time_at: formatDate(
+              deposit.digital_pull_2_time_at
+            ),
             formatted_created_at: deposit.created_at,
             files: deposit.files
               ? deposit.files
@@ -68,7 +72,7 @@ export default function CashDepositTable({
       } else {
         setDeposits([]);
       }
-    } else if (depositsData && depositsData.cash_deposits) {
+    } else if (depositsData?.cash_deposits) {
       const mappedDeposits = depositsData.cash_deposits.map((deposit) => ({
         id: deposit.id,
         bag_number: deposit.bag_number,
@@ -77,23 +81,23 @@ export default function CashDepositTable({
           deposit.deposit_type.slice(1).replace("_", " "),
         formatted_business_date_on: formatDate(deposit.business_date_on),
         formatted_deposit_date_on: formatDate(deposit.deposit_date_on),
-        market_name: deposit.market.name,
-        location_name: deposit.location.name,
+        market_name: deposit.market?.name || "",
+        location_name: deposit.location?.name || "",
         // pay_machine_id: deposit.pay_machine_id,
-        paystation_character: deposit.paystation_character,
+        paystation_character: deposit.paystation_character || "",
         deposit_amount: deposit.deposit_amount_cents / 100,
-        cashier_email: deposit.cashier.email,
-        bank_depositor_email: deposit.bank_depositor?.email,
+        cashier_email: deposit.cashier?.email || "",
+        bank_depositor_email: deposit.bank_depositor?.email || "",
         is_verified_in_bank: deposit.is_verified_in_bank ? "Yes" : "No",
-        bank_description: deposit.bank_description,
-        bank_account_last4_digits: deposit.bank_account_last4_digits,
+        bank_description: deposit.bank_description || "",
+        bank_account_last4_digits: deposit.bank_account_last4_digits || "",
         bank_deposit_amount: deposit.bank_deposit_amount_cents / 100,
-        formatted_bank_deposit_date_on: deposit.bank_deposit_date_on,
+        formatted_bank_deposit_date_on: deposit.bank_deposit_date_on || "",
         variance:
           deposit.bank_deposit_amount_cents / 100 -
           deposit.deposit_amount_cents / 100,
-        shift: deposit.shift,
-        bank_receipt_id: deposit.bank_receipt_id,
+        shift: deposit.shift || "",
+        bank_receipt_id: deposit.bank_receipt_id || "",
         formatted_digital_pull_time_at: formatDateTime(
           deposit.digital_pull_time_at
         ),

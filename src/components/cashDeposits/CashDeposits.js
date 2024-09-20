@@ -21,9 +21,10 @@ function CashDeposits() {
     skip: !currentUserId,
   });
 
-  const marketIds = userAccessibleData?.user_accessible_entities
-    .filter((entity) => entity.entity_type === "Market")
-    .map((entity) => entity.entity_id);
+  const marketIds =
+    userAccessibleData?.user_accessible_entities
+      ?.filter((entity) => entity?.entity_type === "Market")
+      ?.map((entity) => entity?.entity_id) || [];
 
   const {
     data: marketsData,
@@ -31,7 +32,7 @@ function CashDeposits() {
     error: marketsError,
   } = useQuery(GET_USER_MARKETS, {
     variables: { marketIds: marketIds || [] },
-    skip: !marketIds || marketIds.length === 0,
+    skip: !marketIds?.length,
   });
 
   if (userAccessibleLoading || marketsLoading) return <div>Loading...</div>;

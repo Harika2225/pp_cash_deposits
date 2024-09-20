@@ -30,11 +30,12 @@ const Filters = ({
 
   const { data: userAccessibleData } = useQuery(GET_USER_ACCESSIBLE_ENTITIES, {
     variables: { user_id: currentUserId },
+    skip: !currentUserId,
   });
 
   const marketIds = userAccessibleData?.user_accessible_entities
-    .filter((entity) => entity.entity_type === "Market")
-    .map((entity) => entity.entity_id);
+    ?.filter((entity) => entity.entity_type === "Market")
+    ?.map((entity) => entity.entity_id);
 
   const { data: marketsData } = useQuery(GET_USER_MARKETS, {
     variables: { marketIds: marketIds || [] },
@@ -161,7 +162,6 @@ const Filters = ({
       const response = await axios.get(
         `${process.env.REACT_APP_RAILS_BACKEND}${url}`
       );
-      console.log("Response data:", response.data);
       setisFilteredData(response.data);
       console.log("Filter data set:", response.data);
     } catch (error) {
